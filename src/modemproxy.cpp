@@ -58,8 +58,11 @@ TRACE
     if (m_powered == is_powered)
         return;
 
+    QVariant powered(is_powered);
+
     QDBusPendingReply<QVariantMap> reply;
-    reply = SetProperty("Powered", QDBusVariant(is_powered?true:false));
+    reply = SetProperty("Powered", QDBusVariant(powered));
+
     if (reply.isError())
         qCritical() << "SetProperty \"Powered\" failed!";
 }

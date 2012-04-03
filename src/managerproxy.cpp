@@ -126,6 +126,8 @@ void ManagerProxy::modemAdded(const QDBusObjectPath &in0,const QVariantMap &in1)
     qDebug() << QString("modem added: %1").arg(in0.path());
     m_modemList << QString(in0.path());
     m_modemList.removeDuplicates();
+
+    setModem(in0.path());
 }
 
 void ManagerProxy::modemRemoved(const QDBusObjectPath &in0)
@@ -187,7 +189,11 @@ void ManagerProxy::setModem(QString modemPath)
 
     if (m_modem)
     {
-        delete m_modem;
+        if (m_modemList.contains(m_modem->path()))
+	{
+	  m_modemList.removeAll(m_modem->path());
+	}
+	delete m_modem;
         m_modem = NULL;
     }
 

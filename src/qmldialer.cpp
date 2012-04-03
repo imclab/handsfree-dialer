@@ -85,11 +85,14 @@ void QMLDialer::setMailbox(const QString &number)
 
 void QMLDialer::setModemOnline(bool online)
 {
+  if (ManagerProxy::instance() && ManagerProxy::instance()->modem())
+  {
     if(ManagerProxy::instance()->modem()->isValid())
     {
         ManagerProxy::instance()->modem()->setPowered(online);
         return;
     }
+  }
 }
 
 QString QMLDialer::speedDial(int index) const

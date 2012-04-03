@@ -21,12 +21,30 @@ Item {
     width: parent.width
     signal clicked()
     signal close()
+
     Image {
         id: availableBluetoothItem
 
         source: "/usr/share/hfdialer/images/ivi_btn-list-inactive.png"
         
         anchors {fill: parent; leftMargin: 8; rightMargin: 8; topMargin: 8}
+
+	MouseArea {
+          id: clickArea
+          anchors.fill: parent
+
+           onPressed: {
+        	 availableBluetoothItem.source = "/usr/share/hfdialer/images/ivi_btn-list.png"            
+            }
+
+            onReleased: {
+	         availableBluetoothItem.source = "/usr/share/hfdialer/images/ivi_btn-list-inactive.png"      
+            }
+
+            onClicked: {
+                adapter.modemOnline = true
+            }
+        }
 
         Text {
             id: mainText

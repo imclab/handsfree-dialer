@@ -223,6 +223,8 @@ void DialerApplication::modemConnected()
     {
         m_modem = m_manager->modem();
 
+        m_modem->setPowered(true);
+	
         qDebug() << QString("Modem connected");
         connect(m_modem, SIGNAL(interfacesChanged(QStringList)), this,
                            SLOT(modemInterfacesChanged(QStringList)));
