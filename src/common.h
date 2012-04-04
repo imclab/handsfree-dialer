@@ -11,6 +11,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+class QString;
 
 #ifdef VERBOSE 
 #include <QDebug>
