@@ -1,17 +1,23 @@
 include (../common.pri)
 TEMPLATE = app
 QT += dbus declarative
-CONFIG += qdbus mobility qt-mobility link_pkgconfig network debug
+CONFIG += qdbus mobility qt-mobility link_pkgconfig network
 PKGCONFIG += libpulse-mainloop-glib
 MOBILITY += contacts multimedia
 MOC_DIR = .moc
 OBJECTS_DIR = .obj
 MGEN_OUTDIR = .gen
 
+if (verbose) {
+    DEFINES += VERBOSE 
+}
+
 if (wayland) {
     PKGCONFIG += mlite-wayland ofono-qt-wayland
-} else {
+} else if (xlib) {
     PKGCONFIG += mlite-xlib ofono-qt-xlib
+} else {
+    PKGCONFIG += mlite ofono-qt
 }
 
 DEFINES += CONFIG_DEFAULT_TARGET_UX=\\\"tizen-ux-components\\\"

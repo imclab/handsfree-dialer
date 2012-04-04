@@ -1,6 +1,6 @@
 include (common.pri)
 TEMPLATE = subdirs
-CONFIG += ordered debug
+CONFIG += ordered 
 SUBDIRS = src qml dialerassets sounds
 
 #OTHER_FILES += dialer.service

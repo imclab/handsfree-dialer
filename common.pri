@@ -1,8 +1,6 @@
 VERSION = 0.2.5
 TARGET = dialer
-CONFIG += link_pkgconfig network opengl debug
-
-# DEFINES += WANT_DEBUG
+CONFIG += link_pkgconfig network opengl
 
 # Build configuration
 
