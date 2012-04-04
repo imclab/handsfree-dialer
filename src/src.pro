@@ -1,7 +1,7 @@
 TARGET = dialer
 TEMPLATE = app
 QT += dbus declarative
-CONFIG += qdbus mobility qt-mobility link_pkgconfig network trace
+CONFIG += qdbus mobility qt-mobility link_pkgconfig network
 PKGCONFIG += libpulse-mainloop-glib
 MOBILITY += contacts multimedia
 MOC_DIR = .moc
@@ -11,7 +11,7 @@ MGEN_OUTDIR = .gen
 DEFINES += DBUS_SERVICE_PATH=\\\"/com/tizen/${QMAKE_TARGET}\\\"
 DEFINES += DBUS_SERVICE=\\\"com.tizen.${QMAKE_TARGET}\\\"
 
-if (verbose) {
+verbose {
     DEFINES += VERBOSE 
 }
 
