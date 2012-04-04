@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=Dialer
-Icon=icons-Applications-dialer
+Name=Handsfree Dialer
+Icon=hfdialer
 Exec=dialer
-Comment=Tizen voice call application
+Comment=Handsfree Dialer Application
 X-Desktop-File-Install-Version=0.16

@@ -1,4 +1,4 @@
-include (../common.pri)
+TARGET = dialer
 TEMPLATE = app
 QT += dbus declarative
 CONFIG += qdbus mobility qt-mobility link_pkgconfig network
@@ -7,6 +7,9 @@ MOBILITY += contacts multimedia
 MOC_DIR = .moc
 OBJECTS_DIR = .obj
 MGEN_OUTDIR = .gen
+
+DEFINES += DBUS_SERVICE_PATH=\\\"/com/tizen/${QMAKE_TARGET}\\\"
+DEFINES += DBUS_SERVICE=\\\"com.tizen.${QMAKE_TARGET}\\\"
 
 if (verbose) {
     DEFINES += VERBOSE 
@@ -19,8 +22,6 @@ if (wayland) {
 } else {
     PKGCONFIG += mlite ofono-qt
 }
-
-DEFINES += CONFIG_DEFAULT_TARGET_UX=\\\"tizen-ux-components\\\"
 
 target.path += $$INSTALL_ROOT/usr/bin 
 

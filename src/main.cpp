@@ -18,12 +18,6 @@
 #include <QDeclarativeView>
 #include <QFile>
 
-#define CONFIG_KEY_TARGET_UX "/apps/dialer/ux"
-
-#if !defined(CONFIG_DEFAULT_TARGET_UX)
-#  define CONFIG_DEFAULT_TARGET_UX "tizen-ux-components"
-#endif
-
 int main(int argc, char *argv[])
 {
     TRACE
