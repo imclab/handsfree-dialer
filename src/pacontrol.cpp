@@ -647,6 +647,8 @@ void PAControl::unrouteAudio()
 
 void PAControl::onCallsChanged()
 {
+    TRACE
+
     CallManager *cm = ManagerProxy::instance()->callManager();
     if (!cm || !cm->isValid())
     {

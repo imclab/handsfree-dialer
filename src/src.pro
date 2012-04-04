@@ -1,7 +1,7 @@
 TARGET = dialer
 TEMPLATE = app
 QT += dbus declarative
-CONFIG += qdbus mobility qt-mobility link_pkgconfig network
+CONFIG += qdbus mobility qt-mobility link_pkgconfig network trace
 PKGCONFIG += libpulse-mainloop-glib
 MOBILITY += contacts multimedia
 MOC_DIR = .moc
