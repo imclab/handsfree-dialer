@@ -41,7 +41,12 @@ SOURCES += main.cpp \
     qmlmainwindow.cpp \
     qmldialer.cpp \
     qmlcallitem.cpp \
-    dbusdialeradapter.cpp
+	dbusdialeradapter.cpp \
+	voicecall_interface.cpp \
+	operator_interface.cpp \
+	hfdialer_adaptor.cpp \
+	manager_interface.cpp \
+	modem_interface.cpp
 
 HEADERS += \
     common.h \
@@ -57,24 +62,23 @@ HEADERS += \
     pacontrol.h \
     $$MODEL_HEADERS \
     $$STYLE_HEADERS \
-    $$DBUS_INTERFACE_HEADERS \
-    $$DBUS_ADAPTOR_HEADERS \
+	voicecall_interface.h \
+	operator_interface.h \
+	hfdialer_adaptor.h \
+	manager_interface.h \
+	modem_interface.h \
     qmlmainwindow.h \
     qmldialer.h \
     qmlcallitem.h \
     dbusdialeradapter.h
 
-DBUS_ADAPTORS += dbus/com.tizen.hfdialer.xml
 
-DBUS_INTERFACES += \
-    dbus/org.ofono.voicecall.xml \
-    dbus/org.ofono.manager.xml \
-    dbus/org.ofono.modem.xml \
-    dbus/org.ofono.operator.xml \
 
-    system(qdbusxml2cpp -a dialer_adaptor.h: dbus/com.tizen.hfdialer.xml)
-    system(qdbusxml2cpp -i dbustypes.h -p manager_interface.h: dbus/org.ofono.manager.xml)
-    system(qdbusxml2cpp -i dbustypes.h -p modem_interface.h: dbus/org.ofono.modem.xml)
+system(qdbusxml2cpp -p voicecall_interface.h: dbus/org.ofono.voicecall.xml)
+system(qdbusxml2cpp -p operator_interface.h: dbus/org.ofono.operator.xml)
+system(qdbusxml2cpp -a hfdialer_adaptor.h: dbus/com.tizen.hfdialer.xml)
+system(qdbusxml2cpp -i dbustypes.h -p manager_interface.h: dbus/org.ofono.manager.xml)
+system(qdbusxml2cpp -i dbustypes.h -p modem_interface.h: dbus/org.ofono.modem.xml)
 
 MAKE_CLEAN += $$OBJECTS_DIR/*.o
 MAKE_DISTCLEAN += \
