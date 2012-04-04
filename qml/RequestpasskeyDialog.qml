@@ -17,6 +17,10 @@ Rectangle {
     signal replyRequestPasskey(int reply)
     property string deviceName
 
+    Component.onCompleted: {
+        numPad.pidRequest = true
+        numPad.pidEdit = textInputField
+    }
 
 Column {
     width: parent.width - 15
@@ -41,7 +45,7 @@ Column {
         color: "white"
         radius: 5
 
-        TextEdit {
+        TextInput {
             id: textInputField           
             anchors.centerIn: parent
             width: parent.width
@@ -50,6 +54,7 @@ Column {
             color: "black"
             text: replyValue
             horizontalAlignment: Text.AlignHCenter
+            activeFocusOnPress: false
         }
     }
 
@@ -65,6 +70,7 @@ Column {
               anchors.fill: parent
 
         onClicked: {
+            numPad.pidRequest = false
             nearbyDevicesModel.replyRequestPasskey(textInputField.text);
             }
         }
