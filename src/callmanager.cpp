@@ -55,6 +55,8 @@ CallManager::CallManager(const QString &modemPath, QObject *parent)
     connect(this, SIGNAL(hangupMultipartyComplete(const bool)),
             this, SLOT(hangupMultipartyFinished(const bool)));
 
+    connect(this,SIGNAL(callsChanged()),this,SLOT(callChangedSlot()));
+
     if (isValid())
         emit connected();
 }
@@ -455,6 +457,12 @@ void CallManager::callMultipartyChanged()
     TRACE;
     emit callsChanged();
     emit multipartyCallCountChanged(multipartyCallCount());
+}
+
+void CallManager::callChangedSlot()
+{
+    TRACE
+    qDebug()<<"callChanged called!";
 }
 
 /* Local Variables:      */

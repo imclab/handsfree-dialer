@@ -83,6 +83,7 @@ void DialerApplication::connectAll()
             connect(m_manager->voicemail(), SIGNAL(messagesWaitingChanged()), this,
                     SLOT(messagesWaitingChanged()));
             PAControl* paControl = PAControl::instance();
+        qDebug()<<"UBER DEBUG!!!  I can has connect with paControl onCallsChanged";
             connect(m_manager->callManager(), SIGNAL(callsChanged()), paControl,
                     SLOT(onCallsChanged()));
         }

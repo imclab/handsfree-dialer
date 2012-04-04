@@ -69,6 +69,7 @@ Q_SIGNALS:
     void callCountChanged(const int &count);
 
 private Q_SLOTS:
+    void callChangedSlot();
     void updateCallItems();
     void addCall(const QString &path);
     void removeCall(const QString &path);

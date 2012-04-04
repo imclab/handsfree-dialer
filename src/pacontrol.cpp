@@ -650,6 +650,7 @@ void PAControl::onCallsChanged()
     CallManager *cm = ManagerProxy::instance()->callManager();
     if (!cm || !cm->isValid())
         {
+        qDebug("no call manager.  Aborting");
             return;
         }
 
