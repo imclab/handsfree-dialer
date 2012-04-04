@@ -19,40 +19,6 @@
 #define TRACE
 #endif
 
-/*
- * Commonly used QRegExp expressions
- */
-#include <QRegExp>
-#define MATCH_ANY(p) QRegExp(p,Qt::CaseInsensitive,QRegExp::FixedString)
-#define MATCH_ALL QRegExp()
-
-/*
- * Commonly used values for MNotifications
- */
-#define DEFAULT_AVATAR_ICON "icon-m-content-avatar-placeholder"
-#define NOTIFICATION_CALL_EVENT "x-nokia.call"
-
-/*
- * Convienence macro for showing TBD message
- */
-#define SHOW_TBD \
-    MainWindow *w = dynamic_cast<MainWindow *>(DialerApplication::instance()->activeApplicationWindow()); \
-    if (w) \
-       w->showTBD();
-
-/*
- * Convience macro for checking available dialer modes
- */
-#define CONFIG_KEY_TARGET_MODE "/apps/dialer/mode"
-#define MODE_HFP_STR "hfp"
-#define MODE_HANDSET_STR "handset"
-#define MODE_HFP_ENABLED DC->modes().contains(MODE_HFP_STR)
-#define MODE_HANDSET_ENABLED DC->modes().contains(MODE_HANDSET_STR)
 QString stripLineID(QString lineid);
-
-bool currentPageIs(int pagenum);
-
-#include <QDateTime>
-QDateTime qDateTimeFromOfono(const QString &val);
 
 #endif // COMMON_H

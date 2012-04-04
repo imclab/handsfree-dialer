@@ -82,13 +82,9 @@ void DialerApplication::connectAll()
                                           SLOT(onCallsChanged()));
         connect(m_manager->voicemail(), SIGNAL(messagesWaitingChanged()), this,
                                           SLOT(messagesWaitingChanged()));
-        if (!MODE_HANDSET_ENABLED)
-        {
-            PAControl* paControl = PAControl::instance();
-            connect(m_manager->callManager(), SIGNAL(callsChanged()), paControl,
-                                              SLOT(onCallsChanged()));
-     
-        }
+        PAControl* paControl = PAControl::instance();
+        connect(m_manager->callManager(), SIGNAL(callsChanged()), paControl,
+                SLOT(onCallsChanged()));
     }
 }
 
@@ -175,29 +171,6 @@ void DialerApplication::init()
         qCritical() << "Error registering dbus object:" <<
                        QDBusConnection::sessionBus().lastError().message();
     }
-  /*
-    m_seasideModel = new SeasideSyncModel();
-    m_seasideProxy = new SeasideProxyModel();
-    m_seasideProxy->setSourceModel(m_seasideModel);
-    m_seasideProxy->setDynamicSortFilter(true);
-    m_seasideProxy->setFilterKeyColumn(-1);
-    m_seasideProxy->setFilterRegExp(MATCH_ALL);
-    m_seasideProxy->sort(Seaside::ColumnLastName, Qt::AscendingOrder);
-  */
-    //m_historyModel = new HistoryTableModel();
-  //  m_historyProxy = new QSortFilterProxyModel();
-   // m_historyProxy->setSourceModel(m_historyModel);
-   // m_historyProxy->setDynamicSortFilter(true);
-  //  m_historyProxy->setFilterKeyColumn(HistoryTableModel::COLUMN_LINEID);
-  //  m_historyProxy->sort(HistoryTableModel::COLUMN_CALLSTART,
-  //                       Qt::DescendingOrder);
-
-   /*
-    connect(m_manager->modem(), SIGNAL(connected()),
-                                SLOT(modemConnected()));
-    connect(m_manager->modem(), SIGNAL(disconnected()),
-                                SLOT(modemDisconnected()));
-   */
    connect(m_manager, SIGNAL(modemChanged()),
                                 SLOT(modemChanged()));
 
