@@ -1,4 +1,4 @@
-VERSION = 0.2.5
+VERSION = 0.2.6
 CONFIG += link_pkgconfig network opengl
 
 TEMPLATE = subdirs
