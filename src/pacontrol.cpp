@@ -651,7 +651,7 @@ void PAControl::onCallsChanged()
     if (!cm || !cm->isValid())
     {
 	    return;
-     }
+    }
 
     if (cm->dialingCall() || cm->activeCall() || cm->callCount() > 1)
     {

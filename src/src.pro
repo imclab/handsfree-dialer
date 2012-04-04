@@ -15,11 +15,13 @@ if (verbose) {
     DEFINES += VERBOSE 
 }
 
-if (wayland) {
+wayland {
     PKGCONFIG += mlite-wayland ofono-qt-wayland
-} else if (xlib) {
+}
+xlib{
     PKGCONFIG += mlite-xlib ofono-qt-xlib
-} else {
+}
+!xlib:!wayland{
     PKGCONFIG += mlite ofono-qt
 }
 
