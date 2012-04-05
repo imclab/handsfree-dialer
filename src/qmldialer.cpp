@@ -35,6 +35,7 @@ QMLDialer::QMLDialer(QObject *parent)
 
     this->connectAll();
     connect(ManagerProxy::instance(), SIGNAL(callManagerChanged()), SLOT(onCallManagerChanged()));
+    connect(cm, SIGNAL(callCountChanged()), SIGNAL(callCountChanged(cm->callCount())));    
 
     if(cm && cm->activeCall()) d->currentCall = new QMLCallItem(cm->activeCall(), this);
 }
@@ -112,6 +113,14 @@ QMLCallItem* QMLDialer::currentCall() const
     TRACE;
     return d->currentCall;
 }
+
+int QMLDialer::callCount()
+{
+    TRACE;
+    CallManager *cm = ManagerProxy::instance()->callManager();
+    return cm->callCount(); 
+}
+
 
 void QMLDialer::dial(const QString &msisdn)
 {
@@ -221,7 +230,9 @@ void QMLDialer::onCallsChanged()
         {	
             delete d->currentCall;
             d->currentCall = NULL;
+	    emit callCountChanged(cm->callCount());
         }
+
 }
 
 void QMLDialer::onIncomingCall(CallItem *callitem)
