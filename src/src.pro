@@ -74,11 +74,11 @@ HEADERS += \
 
 
 
-system(qdbusxml2cpp -p voicecall_interface.h: dbus/org.ofono.voicecall.xml)
-system(qdbusxml2cpp -p operator_interface.h: dbus/org.ofono.operator.xml)
-system(qdbusxml2cpp -a hfdialer_adaptor.h: dbus/com.tizen.hfdialer.xml)
-system(qdbusxml2cpp -i dbustypes.h -p manager_interface.h: dbus/org.ofono.manager.xml)
-system(qdbusxml2cpp -i dbustypes.h -p modem_interface.h: dbus/org.ofono.modem.xml)
+system(qdbusxml2cpp -p voicecall_interface dbus/org.ofono.voicecall.xml)
+system(qdbusxml2cpp -p operator_interface dbus/org.ofono.operator.xml)
+system(qdbusxml2cpp -a hfdialer_adaptor dbus/com.tizen.hfdialer.xml)
+system(qdbusxml2cpp -i dbustypes.h -p manager_interface dbus/org.ofono.manager.xml)
+system(qdbusxml2cpp -i dbustypes.h -p modem_interface dbus/org.ofono.modem.xml)
 
 MAKE_CLEAN += $$OBJECTS_DIR/*.o
 MAKE_DISTCLEAN += \
