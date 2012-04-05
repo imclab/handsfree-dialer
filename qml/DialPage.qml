@@ -210,7 +210,7 @@ Item
                                 target: btDevicesModel
                                 onDevicePaired: {
                                     console.log("new paired device address:" + device.address + "==" + model.address)
-                                    if(device.address == model.address){
+                                    if(device.address === model.address){
                                         device.trusted = true
                                     }
                                 }

@@ -150,6 +150,8 @@ void DialerApplication::init()
     connect(m_manager, SIGNAL(modemChanged()),
             SLOT(modemChanged()));
 
+   this->connectAll();
+
 }
 
 void DialerApplication::modemChanged()
@@ -161,6 +163,10 @@ void DialerApplication::modemChanged()
                     SLOT(modemConnected()));
             connect(m_manager->modem(), SIGNAL(disconnected()),
                     SLOT(modemDisconnected()));
+    }
+    else
+    {
+        qDebug()<<"modem is null";
         }
 }
 
