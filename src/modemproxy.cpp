@@ -18,7 +18,7 @@ ModemProxy::ModemProxy(const QString &objectPath)
                         QDBusConnection::systemBus()),
       m_interfaces(0)
 {
-TRACE
+    TRACE;
     if (!isValid()) {
         qDebug() << "Failed to connect to Ofono: \n\t" << lastError().message();
     } else {
@@ -40,7 +40,7 @@ TRACE
 
 ModemProxy::~ModemProxy()
 {
-TRACE
+    TRACE;
 }
 
 QStringList ModemProxy::interfaces() const { return m_interfaces; }
@@ -54,7 +54,7 @@ bool    ModemProxy::online() const { return m_online; }
 
 void ModemProxy::setPowered(bool is_powered)
 {
-TRACE
+    TRACE;
     if (m_powered == is_powered)
         return;
 
@@ -69,7 +69,7 @@ TRACE
 
 void ModemProxy::setOnline(bool is_online)
 {
-TRACE
+    TRACE;
     if (m_online == is_online)
         return;
 
@@ -83,34 +83,34 @@ TRACE
 
 void ModemProxy::modemDBusGetPropDone(QDBusPendingCallWatcher *call)
 {
-TRACE
+    TRACE;
     QDBusPendingReply<QVariantMap> reply = *call;
 
     if (reply.isError()) {
-      // TODO: Handle this properly, by setting states, or disabling features...
-      qDebug() << "org.ofono.ModemProxy.getProperties() failed: " <<
-                  reply.error().message();
+        // TODO: Handle this properly, by setting states, or disabling features...
+        qDebug() << "org.ofono.ModemProxy.getProperties() failed: " <<
+            reply.error().message();
     } else {
-      QVariantMap properties = reply.value();
-      m_interfaces = qdbus_cast<QStringList >(properties["Interfaces"]);
-      m_manufacturer = qdbus_cast<QString>(properties["Manufacturer"]);
-      m_model = qdbus_cast<QString>(properties["Model"]);
-      m_powered = qdbus_cast<bool>(properties["Powered"]);
-      m_revision = qdbus_cast<QString>(properties["Revision"]);
-      m_serial = qdbus_cast<QString>(properties["Serial"]);
-      m_online = qdbus_cast<bool>(properties["Online"]);
+        QVariantMap properties = reply.value();
+        m_interfaces = qdbus_cast<QStringList >(properties["Interfaces"]);
+        m_manufacturer = qdbus_cast<QString>(properties["Manufacturer"]);
+        m_model = qdbus_cast<QString>(properties["Model"]);
+        m_powered = qdbus_cast<bool>(properties["Powered"]);
+        m_revision = qdbus_cast<QString>(properties["Revision"]);
+        m_serial = qdbus_cast<QString>(properties["Serial"]);
+        m_online = qdbus_cast<bool>(properties["Online"]);
 
-      // First sucessfull GetProperties == connected
-      if (!m_connected) {
-          m_connected = true;
-          emit connected();
-      }
+        // First sucessfull GetProperties == connected
+        if (!m_connected) {
+            m_connected = true;
+            emit connected();
+        }
     }
 }
 
 void ModemProxy::propertyChanged(const QString &in0, const QDBusVariant &in1)
 {
-TRACE
+    TRACE;
     qDebug() << "org.ofono.ModemProxy.propertyChanged()"
              << in0 << ": " << in1.variant();
     if (in0 == "Interfaces") {
@@ -136,9 +136,9 @@ VoicemailProxy::VoicemailProxy(const QString &objectPath)
     : org::ofono::MessageWaiting(OFONO_SERVICE,
                                  objectPath,
                                  QDBusConnection::systemBus()),
-                                 m_connected(false)
+      m_connected(false)
 {
-TRACE
+    TRACE;
     if (!isValid()) {
         qDebug() << "Failed to connect to Ofono: \n\t" << lastError().message();
     } else {
@@ -158,7 +158,7 @@ TRACE
 
 VoicemailProxy::~VoicemailProxy()
 {
-TRACE
+    TRACE;
 }
 
 bool    VoicemailProxy::isConnected() const { return m_connected; }
@@ -169,7 +169,7 @@ bool    VoicemailProxy::waiting() const { return m_waiting; }
 
 void VoicemailProxy::setMailbox(QString lineid)
 {
-TRACE
+    TRACE;
     if (lineid.isEmpty() || (m_mailbox == lineid))
         return;
 
@@ -179,50 +179,50 @@ TRACE
 
     if (reply.isError())
         qCritical() << "SetProperty \"VoicemailMailboxNumber\" failed: " <<
-                       reply.error().message();
+            reply.error().message();
     else
         m_mailbox = lineid;
 }
 
 void VoicemailProxy::voicemailDBusGetPropDone(QDBusPendingCallWatcher *call)
 {
-TRACE
+    TRACE;
     QDBusPendingReply<QVariantMap> reply = *call;
 
     if (reply.isError()) {
-      // TODO: Handle this properly, by setting states, or disabling features...
-      qDebug() << "org.ofono.MessageWaiting.getProperties() failed: " <<
-                  reply.error().message();
+        // TODO: Handle this properly, by setting states, or disabling features...
+        qDebug() << "org.ofono.MessageWaiting.getProperties() failed: " <<
+            reply.error().message();
     } else {
-      QVariantMap properties = reply.value();
-      bool waiting = qdbus_cast<bool>(properties["VoicemailWaiting"]);
-      int count = qdbus_cast<int>(properties["VoicemailMessageCount"]);
-      QString mailbox = qdbus_cast<QString>(properties["VoicemailMailboxNumber"]);
+        QVariantMap properties = reply.value();
+        bool waiting = qdbus_cast<bool>(properties["VoicemailWaiting"]);
+        int count = qdbus_cast<int>(properties["VoicemailMessageCount"]);
+        QString mailbox = qdbus_cast<QString>(properties["VoicemailMailboxNumber"]);
 
-      if (count != m_count) {
-          m_count = count;
-          emit messagesWaitingChanged();
-      }
-      if (waiting != m_waiting) {
-          m_waiting = waiting;
-          emit messagesWaitingChanged();
-      }
-      if (!mailbox.isEmpty() && (mailbox != m_mailbox)) {
-          m_mailbox = mailbox;
-          emit mailboxChanged();
-      }
+        if (count != m_count) {
+            m_count = count;
+            emit messagesWaitingChanged();
+        }
+        if (waiting != m_waiting) {
+            m_waiting = waiting;
+            emit messagesWaitingChanged();
+        }
+        if (!mailbox.isEmpty() && (mailbox != m_mailbox)) {
+            m_mailbox = mailbox;
+            emit mailboxChanged();
+        }
 
-      // First sucessfull GetProperties == connected
-      if (!m_connected) {
-          m_connected = true;
-          emit connected();
-      }
+        // First sucessfull GetProperties == connected
+        if (!m_connected) {
+            m_connected = true;
+            emit connected();
+        }
     }
 }
 
 void VoicemailProxy::voicemailPropertyChanged(const QString &in0, const QDBusVariant &in1)
 {
-TRACE
+    TRACE;
     qDebug() << QString("Property \"%1\" changed...").arg(in0);
     bool waiting;
     int count;
@@ -256,7 +256,7 @@ VolumeManager::VolumeManager(const QString &objectPath)
                              objectPath,
                              QDBusConnection::systemBus())
 {
-TRACE
+    TRACE;
     if (!isValid()) {
         qDebug() << "Failed to connect to Ofono: \n\t" << lastError().message();
     } else {
@@ -274,7 +274,7 @@ TRACE
 
 VolumeManager::~VolumeManager()
 {
-TRACE
+    TRACE;
 }
 
 QString VolumeManager::path() const { return m_path; }
@@ -285,7 +285,7 @@ bool    VolumeManager::isConnected() const { return m_connected; }
 
 void VolumeManager::setSpeakerVolume(int volume)
 {
-TRACE
+    TRACE;
     if (m_speakerVolume == volume)
         return;
 
@@ -300,14 +300,14 @@ TRACE
 
     if (reply.isError())
         qCritical() << "SetProperty \"SpeakerVolume\" failed: " <<
-                       reply.error().message();
+            reply.error().message();
     else
         m_speakerVolume = volume;
 }
 
 void VolumeManager::setMicVolume(int volume)
 {
-TRACE
+    TRACE;
     if (m_micVolume == volume)
         return;
 
@@ -322,14 +322,14 @@ TRACE
 
     if (reply.isError())
         qCritical() << "SetProperty \"MicrophoneVolume\" failed: " <<
-                       reply.error().message();
+            reply.error().message();
     else
         m_micVolume = volume;
 }
 
 void VolumeManager::setMuted(bool is_muted)
 {
-TRACE
+    TRACE;
     if (m_muted == is_muted)
         return;
 
@@ -339,30 +339,36 @@ TRACE
 
     if (reply.isError())
         qCritical() << "SetProperty \"Muted\" failed: " <<
-                       reply.error().message();
+            reply.error().message();
     else
         m_muted = is_muted;
 }
 
 void VolumeManager::volumeDBusGetPropDone(QDBusPendingCallWatcher *call)
 {
-TRACE
+    TRACE;
     QDBusPendingReply<QVariantMap> reply = *call;
 
     if (reply.isError()) {
-      // TODO: Handle this properly, by setting states, or disabling features...
-      qDebug() << "org.ofono.CallVolume.getProperties() failed: " <<
-                  reply.error().message();
+        // TODO: Handle this properly, by setting states, or disabling features...
+        qDebug() << "org.ofono.CallVolume.getProperties() failed: " <<
+            reply.error().message();
     } else {
-      QVariantMap properties = reply.value();
-      m_speakerVolume = qdbus_cast<int>(properties["SpeakerVolume"]);
-      m_micVolume = qdbus_cast<int>(properties["MicrophoneVolume"]);
-      m_muted = qdbus_cast<bool>(properties["Muted"]);
+        QVariantMap properties = reply.value();
+        m_speakerVolume = qdbus_cast<int>(properties["SpeakerVolume"]);
+        m_micVolume = qdbus_cast<int>(properties["MicrophoneVolume"]);
+        m_muted = qdbus_cast<bool>(properties["Muted"]);
 
-      // First sucessfull GetProperties == connected
-      if (!m_connected) {
-          m_connected = true;
-          emit connected();
-      }
+        // First sucessfull GetProperties == connected
+        if (!m_connected) {
+            m_connected = true;
+            emit connected();
+        }
     }
 }
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

@@ -22,15 +22,15 @@
 
 class CallProxy: public org::ofono::VoiceCall
 {
-    Q_OBJECT
+    Q_OBJECT;
 
-    Q_PROPERTY(QString   lineID READ lineID)
-    Q_PROPERTY(QString   name READ name)
-    Q_PROPERTY(QString   state READ state)
-    Q_PROPERTY(QDateTime startTime READ startTime)
-    Q_PROPERTY(int       duration READ duration)
-    Q_PROPERTY(QString   reason READ reason)
-    Q_PROPERTY(bool   multiparty READ multiparty)
+    Q_PROPERTY(QString   lineID READ lineID);
+    Q_PROPERTY(QString   name READ name);
+    Q_PROPERTY(QString   state READ state);
+    Q_PROPERTY(QDateTime startTime READ startTime);
+    Q_PROPERTY(int       duration READ duration);
+    Q_PROPERTY(QString   reason READ reason);
+    Q_PROPERTY(bool      multiparty READ multiparty);
 
 public:
     CallProxy(const QString &callPath);
@@ -90,7 +90,13 @@ private:
     bool               m_connected;
     bool               m_multiparty;
 
-    Q_DISABLE_COPY(CallProxy)
+    Q_DISABLE_COPY(CallProxy);
 };
 
 #endif // CALLPROXY_H
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

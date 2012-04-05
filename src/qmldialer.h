@@ -17,15 +17,15 @@
 
 class QMLDialer : public QObject
 {
-    Q_OBJECT
+    Q_OBJECT;
 
-    Q_PROPERTY(QString mailbox READ mailbox WRITE setMailbox)
-    Q_PROPERTY(QMLCallItem* currentCall READ currentCall)
-    Q_PROPERTY(bool modemOnline READ modemOnline WRITE setModemOnline)
+    Q_PROPERTY(QString mailbox READ mailbox WRITE setMailbox);
+    Q_PROPERTY(QMLCallItem* currentCall READ currentCall);
+    Q_PROPERTY(bool modemOnline READ modemOnline WRITE setModemOnline);
 
 public:
     explicit QMLDialer(QObject *parent = 0);
-            ~QMLDialer();
+    ~QMLDialer();
 
     QString      mailbox        () const;
     QMLCallItem* currentCall    () const;
@@ -71,3 +71,9 @@ private:
 };
 
 #endif // QMLDIALER_H
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

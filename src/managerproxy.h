@@ -15,7 +15,6 @@
 #include "modemproxy.h"
 #include "networkproxy.h"
 #include "callmanager.h"
-//#include "resourceproxy.h"
 #include "common.h"
 #include <QtDBus>
 #include <QDebug>
@@ -25,9 +24,9 @@
 
 class ManagerProxy: public org::ofono::Manager
 {
-    Q_OBJECT
-    Q_PROPERTY(ModemProxy* modem READ modem)
-    Q_PROPERTY(NetworkProxy* network READ network)
+    Q_OBJECT;
+    Q_PROPERTY(ModemProxy* modem READ modem);
+    Q_PROPERTY(NetworkProxy* network READ network);
 
 public:
     virtual ~ManagerProxy();
@@ -82,3 +81,9 @@ private:
 };
 
 #endif
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

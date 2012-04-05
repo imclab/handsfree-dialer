@@ -20,12 +20,12 @@ class QMLMainWindowPrivate;
 
 class QMLMainWindow : public QDeclarativeView 
 {
-    Q_OBJECT
+    Q_OBJECT;
 
 public:
     static   QMLMainWindow* instance();
     static   QMLMainWindow* instanceP(QWidget* parent);
-            ~QMLMainWindow();
+    ~QMLMainWindow();
 
 public Q_SLOTS:
     void hide();
@@ -49,3 +49,9 @@ private:
 };
 
 #endif // QMLMAINWINDOW_H
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

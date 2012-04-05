@@ -14,18 +14,24 @@
 DBusDialerAdapter::DBusDialerAdapter(DialerApplication *application)
     : QDBusAbstractAdaptor(application)
 {
-    TRACE
+    TRACE;
 }
 
 DBusDialerAdapter::~DBusDialerAdapter()
 {
-    TRACE
+    TRACE;
 }
 
 void DBusDialerAdapter::call(const QString &msisdn)
 {
-    TRACE
+    TRACE;
 
     if(!ManagerProxy::instance()->callManager()) return;
     ManagerProxy::instance()->callManager()->dial(msisdn);
 }
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

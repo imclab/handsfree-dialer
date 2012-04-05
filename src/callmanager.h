@@ -18,10 +18,10 @@
 
 class CallManager: public OfonoVoiceCallManager
 {
-    Q_OBJECT
+    Q_OBJECT;
 
-    Q_PROPERTY(int multipartyCallCount READ multipartyCallCount NOTIFY multipartyCallCountChanged)
-    Q_PROPERTY(int callCount READ callCount NOTIFY callCountChanged)
+    Q_PROPERTY(int multipartyCallCount READ multipartyCallCount NOTIFY multipartyCallCountChanged);
+    Q_PROPERTY(int callCount READ callCount NOTIFY callCountChanged);
 
 public:
     explicit CallManager(const QString &modemPath="", QObject *parent=0);
@@ -44,11 +44,6 @@ public:
 
 public Q_SLOTS:
     void setActiveCall(const CallItem &call);
-
-    // Overloaded version of OfonoVoiceCallManager::dial() that
-    // takes a PeopleItem rather than number string and uses default
-    // as CLIR value
-  //  void dial(const PeopleItem *person);
 
     // Overloaded version of OfonoVoiceCallManager::dial() that
     // assumes CLIR == default
@@ -101,7 +96,13 @@ private Q_SLOTS:
 private:
     class CallManagerPrivate *d;
 
-    Q_DISABLE_COPY(CallManager)
+    Q_DISABLE_COPY(CallManager);
 };
 
 #endif // CALLMANAGER_H
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

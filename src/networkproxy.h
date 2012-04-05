@@ -24,13 +24,13 @@
  * **************************************************************/
 class OperatorProxy: public org::ofono::NetworkOperator
 {
-    Q_OBJECT
-    Q_PROPERTY(QString path READ path)
-    Q_PROPERTY(QString countryCode READ countryCode)
-    Q_PROPERTY(QString networkCode READ networkCode)
-    Q_PROPERTY(QString name READ name)
-    Q_PROPERTY(QString status READ status)
-    Q_PROPERTY(QStringList technologies READ technologies)
+    Q_OBJECT;
+    Q_PROPERTY(QString path READ path);
+    Q_PROPERTY(QString countryCode READ countryCode);
+    Q_PROPERTY(QString networkCode READ networkCode);
+    Q_PROPERTY(QString name READ name);
+    Q_PROPERTY(QString status READ status);
+    Q_PROPERTY(QStringList technologies READ technologies);
 
 public:
     OperatorProxy(const QString &objectPath);
@@ -64,12 +64,12 @@ private:
  * **************************************************************/
 class NetworkProxy: public org::ofono::NetworkRegistration
 {
-    Q_OBJECT
-    Q_PROPERTY(QList<OperatorProxy*> operators READ operators)
-    Q_PROPERTY(OperatorProxy currentOperator READ currentOperator)
-    Q_PROPERTY(QString mode READ mode)
-    Q_PROPERTY(QString name READ name)
-    Q_PROPERTY(QString status READ status)
+    Q_OBJECT;
+    Q_PROPERTY(QList<OperatorProxy*> operators READ operators);
+    Q_PROPERTY(OperatorProxy currentOperator READ currentOperator);
+    Q_PROPERTY(QString mode READ mode);
+    Q_PROPERTY(QString name READ name);
+    Q_PROPERTY(QString status READ status);
 
 public:
     NetworkProxy(const QString &objectPath);
@@ -102,3 +102,9 @@ private:
 };
 
 #endif
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

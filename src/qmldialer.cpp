@@ -22,7 +22,7 @@ class QMLDialerPrivate
 public:
     QMLDialerPrivate()
         : currentCall(NULL)
-    { TRACE }
+    { TRACE; }
 
     QMLCallItem *currentCall;
 };
@@ -30,7 +30,7 @@ public:
 QMLDialer::QMLDialer(QObject *parent)
     : QObject(parent), d(new QMLDialerPrivate)
 {
-    TRACE
+    TRACE;
     CallManager *cm = ManagerProxy::instance()->callManager();
 
     this->connectAll();
@@ -41,18 +41,18 @@ QMLDialer::QMLDialer(QObject *parent)
 
 QMLDialer::~QMLDialer()
 {
-    TRACE
+    TRACE;
     delete this->d;
 }
 
 QString QMLDialer::mailbox() const
 {
-    TRACE
+    TRACE;
 
     if(ManagerProxy::instance()->voicemail()->isConnected())
-    {
-        return ManagerProxy::instance()->voicemail()->mailbox();
-    }
+        {
+            return ManagerProxy::instance()->voicemail()->mailbox();
+        }
 
     // Fall back to GConf voicemail setting.
     return MGConfItem(CONFIG_KEY_VOICEMAIL_NUMBER).value().toString();
@@ -62,22 +62,22 @@ bool QMLDialer::modemOnline()
 {
     if(ManagerProxy::instance()->modem() &&
        ManagerProxy::instance()->modem()->isValid())
-    {
-        return ManagerProxy::instance()->modem()->powered();
-    }
+        {
+            return ManagerProxy::instance()->modem()->powered();
+        }
 
     return false;
 }
 
 void QMLDialer::setMailbox(const QString &number)
 {
-    TRACE
+    TRACE;
 
     if(ManagerProxy::instance()->voicemail()->isConnected())
-    {
-        ManagerProxy::instance()->voicemail()->setMailbox(number);
-        return;
-    }
+        {
+            ManagerProxy::instance()->voicemail()->setMailbox(number);
+            return;
+        }
 
     // Fall back to GConf voicemail setting.
     MGConfItem(CONFIG_KEY_VOICEMAIL_NUMBER).set(number);
@@ -85,76 +85,76 @@ void QMLDialer::setMailbox(const QString &number)
 
 void QMLDialer::setModemOnline(bool online)
 {
-  if (ManagerProxy::instance() && ManagerProxy::instance()->modem())
-  {
-    if(ManagerProxy::instance()->modem()->isValid())
-    {
-        ManagerProxy::instance()->modem()->setPowered(online);
-        return;
-    }
-  }
+    if (ManagerProxy::instance() && ManagerProxy::instance()->modem())
+        {
+            if(ManagerProxy::instance()->modem()->isValid())
+                {
+                    ManagerProxy::instance()->modem()->setPowered(online);
+                    return;
+                }
+        }
 }
 
 QString QMLDialer::speedDial(int index) const
 {
-    TRACE
+    TRACE;
     return MGConfItem(QString("/apps/dialer/speeddial/%1").arg(index)).value().toString();
 }
 
 void QMLDialer::setSpeedDial(int index, const QString &number)
 {
-    TRACE
+    TRACE;
     MGConfItem(QString("/apps/dialer/speeddial/%1").arg(index)).set(number);
 }
 
 QMLCallItem* QMLDialer::currentCall() const
 {
-    TRACE
+    TRACE;
     return d->currentCall;
 }
 
 void QMLDialer::dial(const QString &msisdn)
 {
-    TRACE
+    TRACE;
     CallManager *cm = ManagerProxy::instance()->callManager();
     if (cm && cm->isValid())
-    {
-        cm->dial(msisdn);
-    }
+        {
+            cm->dial(msisdn);
+        }
 	
 }
 
 void QMLDialer::hangupAll()
 {
-    TRACE
+    TRACE;
     CallManager *cm = ManagerProxy::instance()->callManager();
     if ((cm && cm->isValid()))
-    { 
-        cm->hangupAll();
-     }
+        { 
+            cm->hangupAll();
+        }
 }
 
 void QMLDialer::silenceRingtone()
 {
     if(ManagerProxy::instance()->volumeManager()->isConnected())
-    {
-        qDebug() << "Attempting to mute call with volume manager.";
-        ManagerProxy::instance()->volumeManager()->setMuted(true);
-    }
+        {
+            qDebug() << "Attempting to mute call with volume manager.";
+            ManagerProxy::instance()->volumeManager()->setMuted(true);
+        }
     else if(d->currentCall)
-    {
-        qDebug() << "Attempting to mute call with call item signaller.";
-        d->currentCall->proxy()->silenceRingtone();
-    }
+        {
+            qDebug() << "Attempting to mute call with call item signaller.";
+            d->currentCall->proxy()->silenceRingtone();
+        }
     else
-    {
-        qDebug() << "Couldn't decide how to mute ringtone!";
-    }
+        {
+            qDebug() << "Couldn't decide how to mute ringtone!";
+        }
 }
 
 void QMLDialer::sendTones(const QString &tones)
 {
-    TRACE
+    TRACE;
     CallManager *cm = ManagerProxy::instance()->callManager();
     if (cm && cm->isValid())
         cm->sendTones(tones);
@@ -162,7 +162,7 @@ void QMLDialer::sendTones(const QString &tones)
 
 void QMLDialer::transfer()
 {
-    TRACE
+    TRACE;
     CallManager *cm = ManagerProxy::instance()->callManager();
     if (cm && cm->isValid())
         cm->transfer();
@@ -170,7 +170,7 @@ void QMLDialer::transfer()
 
 void QMLDialer::swapCalls()
 {
-    TRACE
+    TRACE;
     CallManager *cm = ManagerProxy::instance()->callManager();
     if (cm && cm->isValid())
         cm->swapCalls();
@@ -178,7 +178,7 @@ void QMLDialer::swapCalls()
 
 void QMLDialer::releaseAndAnswer()
 {
-    TRACE
+    TRACE;
     CallManager *cm = ManagerProxy::instance()->callManager();
     if (cm && cm->isValid())
         cm->releaseAndAnswer();
@@ -186,7 +186,7 @@ void QMLDialer::releaseAndAnswer()
 
 void QMLDialer::holdAndAnswer()
 {
-    TRACE
+    TRACE;
     CallManager *cm = ManagerProxy::instance()->callManager();
     if (cm && cm->isValid())
         cm->holdAndAnswer();
@@ -194,26 +194,15 @@ void QMLDialer::holdAndAnswer()
 
 void QMLDialer::createMultiparty()
 {
-  /*  TRACE
-    CallManager *cm = ManagerProxy::instance()->callManager();
-    if (cm && cm->isValid())
-        cm->createMultiparty();
-*/
 }
 
 void QMLDialer::hangupMultiparty()
 {
-/*
-    TRACE
-    CallManager *cm = ManagerProxy::instance()->callManager();
-    if (cm && cm->isValid())
-        cm->hangupMultiparty();
-*/
 }
 
 void QMLDialer::privateChat(const QMLCallItem &call)
 {
-    TRACE
+    TRACE;
     CallManager *cm = ManagerProxy::instance()->callManager();
     if (cm && cm->isValid())
         cm->privateChat(*call.proxy());
@@ -221,23 +210,23 @@ void QMLDialer::privateChat(const QMLCallItem &call)
 
 void QMLDialer::onCallsChanged()
 {
-    TRACE
+    TRACE;
     CallManager *cm = ManagerProxy::instance()->callManager();
 
     if(cm->activeCall())
-    {
-        this->onIncomingCall(cm->activeCall());
-    }
+        {
+            this->onIncomingCall(cm->activeCall());
+        }
     else
-    {	
-        delete d->currentCall;
-	d->currentCall = NULL;
-    }
+        {	
+            delete d->currentCall;
+            d->currentCall = NULL;
+        }
 }
 
 void QMLDialer::onIncomingCall(CallItem *callitem)
 {
-    TRACE
+    TRACE;
 
     d->currentCall = new QMLCallItem(callitem, this);
     emit this->incomingCall();
@@ -245,30 +234,36 @@ void QMLDialer::onIncomingCall(CallItem *callitem)
 
 void QMLDialer::connectAll()
 {
-    TRACE
+    TRACE;
     CallManager *cm = ManagerProxy::instance()->callManager();
 
     if (cm && cm->isValid())
-    {
-        disconnect(cm, SIGNAL(callsChanged()));
-        disconnect(cm, SIGNAL(incomingCall(CallItem*)));
-        connect(cm, SIGNAL(callsChanged()), this, SLOT(onCallsChanged()));
-        connect(cm, SIGNAL(incomingCall(CallItem*)), SLOT(onIncomingCall(CallItem*)));
-        qDebug() << QString("CallMgr is connected");
-    }
+        {
+            disconnect(cm, SIGNAL(callsChanged()));
+            disconnect(cm, SIGNAL(incomingCall(CallItem*)));
+            connect(cm, SIGNAL(callsChanged()), this, SLOT(onCallsChanged()));
+            connect(cm, SIGNAL(incomingCall(CallItem*)), SLOT(onIncomingCall(CallItem*)));
+            qDebug() << QString("CallMgr is connected");
+        }
     else if (cm)
-    {
-        disconnect(cm, SIGNAL(connected()));
-        connect(cm, SIGNAL(connected()), this, SLOT(connectAll()));
-        qDebug() << QString("CallMgr is not yet valid");
-    }
+        {
+            disconnect(cm, SIGNAL(connected()));
+            connect(cm, SIGNAL(connected()), this, SLOT(connectAll()));
+            qDebug() << QString("CallMgr is not yet valid");
+        }
 }
 
 void QMLDialer::onCallManagerChanged()
 {
-    TRACE
+    TRACE;
 
     CallManager *cm = ManagerProxy::instance()->callManager();
     this->connectAll();
     if(cm && cm->activeCall()) d->currentCall = new QMLCallItem(cm->activeCall(), this);
 }
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

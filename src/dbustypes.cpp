@@ -49,3 +49,9 @@ const QDBusArgument & operator >> (const QDBusArgument &argument,
     argument.endStructure();
     return argument;
 }
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

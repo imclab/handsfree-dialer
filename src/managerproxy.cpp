@@ -27,7 +27,7 @@ ManagerProxy::ManagerProxy(const QString &service,
       m_volumeManager(0),
       m_voicemail(0)
 {
-TRACE
+    TRACE;
     if (gManager)
         qFatal("ManagerProxy: There can be only one!");
 
@@ -57,7 +57,7 @@ TRACE
 
 ManagerProxy::~ManagerProxy()
 {
-    TRACE
+    TRACE;
     if (m_volumeManager)
         delete m_volumeManager;
     m_volumeManager = 0;
@@ -84,20 +84,20 @@ ManagerProxy::~ManagerProxy()
 void ManagerProxy::managerDBusGetModemsDone(QDBusPendingCallWatcher *call)
 {
     QDBusPendingReply<QArrayOfPathProperties> reply = *call;
-TRACE
+    TRACE;
     if (reply.isError()) {
         // TODO: Handle this properly, by setting states, or disabling features
         qWarning() << "org.ofono.Manager.GetModems() failed: " <<
-                      reply.error().message();
+            reply.error().message();
     } else {
         QArrayOfPathProperties modems = reply.value();
         if (modems.count() >= 1) {
             // FIXME: Handle multiple modems...
             foreach (OfonoPathProperties p, modems)
-            {
-                qDebug() << "modem: " << p.path.path();
-                m_modemList << QString(p.path.path());
-            }
+                {
+                    qDebug() << "modem: " << p.path.path();
+                    m_modemList << QString(p.path.path());
+                }
 
             OfonoPathProperties p = modems[0];
             if (m_modemPath.isNull() || m_modemPath.isEmpty()) {
@@ -108,7 +108,7 @@ TRACE
                 setCallManager(m_modemPath);
                 setVolumeManager(m_modemPath);
                 setVoicemail(m_modemPath);
-            // TODO: Connect to service proxies as available/needed here
+                // TODO: Connect to service proxies as available/needed here
             }
         }
     }
@@ -117,11 +117,11 @@ TRACE
 void ManagerProxy::modemAdded(const QDBusObjectPath &in0,const QVariantMap &in1)
 {
     Q_UNUSED(in1)
-    TRACE
+        TRACE;
 
     // TODO: Handle modem additions, maybe...
     qWarning() << QString("Unhandled ModemAdded event: \"%1\"")
-                  .arg(in0.path());
+        .arg(in0.path());
 
     qDebug() << QString("modem added: %1").arg(in0.path());
     m_modemList << QString(in0.path());
@@ -132,11 +132,11 @@ void ManagerProxy::modemAdded(const QDBusObjectPath &in0,const QVariantMap &in1)
 
 void ManagerProxy::modemRemoved(const QDBusObjectPath &in0)
 {
-    TRACE
+    TRACE;
 
     // TODO: Handle modem removals, currently active for sure, others, maybe...
     qWarning() << QString("Unhandled ModemRemoved event: \"%1\"")
-                  .arg(in0.path());
+        .arg(in0.path());
 
     qDebug() << QString("modem removed: ").arg(in0.path());
     m_modemList.removeOne(QString(in0.path()));
@@ -188,14 +188,14 @@ void ManagerProxy::setModem(QString modemPath)
         return;
 
     if (m_modem)
-    {
-        if (m_modemList.contains(m_modem->path()))
-	{
-	  m_modemList.removeAll(m_modem->path());
-	}
-	delete m_modem;
-        m_modem = NULL;
-    }
+        {
+            if (m_modemList.contains(m_modem->path()))
+                {
+                    m_modemList.removeAll(m_modem->path());
+                }
+            delete m_modem;
+            m_modem = NULL;
+        }
 
     if (m_modemList.contains(modemPath)) {
         m_modem = new ModemProxy(modemPath);
@@ -298,3 +298,9 @@ void ManagerProxy::setVoicemail(QString modempath)
         }
     }
 }
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

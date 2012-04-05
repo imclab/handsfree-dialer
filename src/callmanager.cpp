@@ -10,7 +10,6 @@
 
 #include "common.h"
 #include "callmanager.h"
-//#include "resourceproxy.h"
 
 class CallManagerPrivate
 {
@@ -23,26 +22,7 @@ CallManager::CallManager(const QString &modemPath, QObject *parent)
     : OfonoVoiceCallManager(OfonoModem::AutomaticSelect, modemPath, parent),
       d(new CallManagerPrivate)
 {
-    TRACE
-
-//    d->resource = ResourceProxy::instance();
-
-    // Resource proxy binding
-//    if (d->resource) {
-//        connect(d->resource, SIGNAL(incomingResourceAcquired(CallItem *)),
-//                SLOT(proceedIncomingCall(CallItem *)));
-//        connect(d->resource, SIGNAL(incomingResourceDenied(CallItem *)),
-//                SLOT(deniedIncomingCall(CallItem *)));
-//        connect(d->resource, SIGNAL(incomingResourceLost(CallItem *)),
-//                SLOT(lostIncomingCall(CallItem *)));
-
-//        connect(d->resource, SIGNAL(dialResourceAcquired(const QString)),
-//                SLOT(proceedCallDial(const QString)));
-//        connect(d->resource, SIGNAL(dialResourceDenied()),
-//                SLOT(deniedCallDial()));
-//        connect(d->resource, SIGNAL(callResourceLost()),
-//                SLOT(lostCallDial()));
-  //  }
+    TRACE;
 
     // Transform existing calls list, into list of CallItems
     updateCallItems();
@@ -81,7 +61,7 @@ CallManager::CallManager(const QString &modemPath, QObject *parent)
 
 CallManager::~CallManager()
 {
-    TRACE
+    TRACE;
     // FIXME: Do something here!!!
     qDebug() << QString("Destroying VoiceCallManager");
     qDebug() << QString("Purging all CallItems");
@@ -91,26 +71,26 @@ CallManager::~CallManager()
         delete item;
     }
     if (d->callItems.size() > 0)
-	emit callsChanged();
+        emit callsChanged();
     d->callItems.clear();
 }
 
 QList<CallItem *> CallManager::getCallItems() const
 {
-    TRACE
+    TRACE;
     return d->callItems.values();
 }
 
 int CallManager::callCount() const
 {
-    TRACE
+    TRACE;
     qDebug()<<"call count is currently = "<<d->callItems.size();
     return d->callItems.size();
 }
 
 int CallManager::multipartyCallCount() const
 {
-    TRACE
+    TRACE;
     int call_count = 0;
     foreach (CallItem *c, d->callItems) {
         if(c->multiparty()) {
@@ -122,84 +102,77 @@ int CallManager::multipartyCallCount() const
 
 CallItem *CallManager::activeCall() const
 {
-    TRACE
+    TRACE;
     if (d->callItems.size())
-    foreach (CallItem *c, d->callItems)
-        if (c->state() == STATE_ACTIVE)
-            return c;
+        foreach (CallItem *c, d->callItems)
+            if (c->state() == STATE_ACTIVE)
+                return c;
     return NULL;
 }
 
 CallItem *CallManager::heldCall() const
 {
-    TRACE
+    TRACE;
     if (d->callItems.size())
-    foreach (CallItem *c, d->callItems)
-        if (c->state() == STATE_HELD)
-            return c;
+        foreach (CallItem *c, d->callItems)
+            if (c->state() == STATE_HELD)
+                return c;
     return NULL;
 }
 
 CallItem *CallManager::dialingCall() const
 {
-    TRACE
+    TRACE;
     if (d->callItems.size())
-    foreach (CallItem *c, d->callItems)
-        if (c->state() == STATE_DIALING)
-            return c;
+        foreach (CallItem *c, d->callItems)
+            if (c->state() == STATE_DIALING)
+                return c;
     return NULL;
 }
 
 CallItem *CallManager::incomingCall() const
 {
-    TRACE
+    TRACE;
     if (d->callItems.size())
-    foreach (CallItem *c, d->callItems)
-        if (c->state() == STATE_INCOMING)
-            return c;
+        foreach (CallItem *c, d->callItems)
+            if (c->state() == STATE_INCOMING)
+                return c;
     return NULL;
 }
 
 CallItem *CallManager::waitingCall() const
 {
-    TRACE
+    TRACE;
     if (d->callItems.size())
-    foreach (CallItem *c, d->callItems)
-        if (c->state() == STATE_WAITING)
-            return c;
+        foreach (CallItem *c, d->callItems)
+            if (c->state() == STATE_WAITING)
+                return c;
     return NULL;
 }
 
 CallItem *CallManager::alertingCall() const
 {
-    TRACE
+    TRACE;
     if (d->callItems.size())
-    foreach (CallItem *c, d->callItems)
-        if (c->state() == STATE_ALERTING)
-            return c;
+        foreach (CallItem *c, d->callItems)
+            if (c->state() == STATE_ALERTING)
+                return c;
     return NULL;
 }
 
 void CallManager::setActiveCall(const CallItem &call)
 {
-    TRACE
-    //if (!call.isActive())
-        swapCalls();
+    TRACE;
+    swapCalls();
 }
-/*
-void CallManager::dial(const PeopleItem *person)
-{
-    TRACE
-    dial(person->phone());
-}
-*/
+
 void CallManager::dial(const QString &number)
 {
-    TRACE
+    TRACE;
     // Nothing to do if the modem is not powered up
 
     if(!modem()->powered()) {
-	emit callsChanged();
+        emit callsChanged();
         return;
     }
 
@@ -214,15 +187,12 @@ void CallManager::dial(const QString &number)
         }
     }
 
-//    if (d->resource)
-//        d->resource->acquireDialResource(number);
-	proceedCallDial(number);
+    proceedCallDial(number);
 }
 
 void CallManager::privateChat(const CallItem &call)
 {
-    //TRACE
-    //OfonoVoiceCallManager::privateChat(call.path());
+    TRACE;
 }
 
 /*
@@ -230,33 +200,33 @@ void CallManager::privateChat(const CallItem &call)
  */
 void CallManager::deniedCallDial()
 {
-    TRACE
+    TRACE;
     qCritical() << QString("Denied: Dial resource");
 }
 
 void CallManager::lostCallDial()
 {
-    TRACE
+    TRACE;
     qCritical() << QString("Lost: Dial resource");
     hangupAll();
 }
 
 void CallManager::proceedCallDial(const QString number)
 {
-    TRACE
+    TRACE;
     OfonoVoiceCallManager::dial(stripLineID(number), QString());
 }
 
 void CallManager::deniedCallAnswer()
 {
-    TRACE
+    TRACE;
     qCritical() << QString("Denied: Call resource");
     hangupAll();
 }
 
 void CallManager::deniedIncomingCall(CallItem *call)
 {
-    TRACE
+    TRACE;
 
     qCritical() << QString("Denied: Incoming Call resource");
     qDebug() << QString("Insert new CallItem %1").arg(call->path());
@@ -266,14 +236,14 @@ void CallManager::deniedIncomingCall(CallItem *call)
 
 void CallManager::lostIncomingCall(CallItem *call)
 {
-    TRACE
+    TRACE;
     Q_UNUSED(call)
-    qCritical() << QString("Lost: Incoming Call resource");
+        qCritical() << QString("Lost: Incoming Call resource");
 }
 
 void CallManager::proceedIncomingCall(CallItem *call)
 {
-    TRACE
+    TRACE;
     qDebug() << QString("Acquired: Incoming Call resource");
     qDebug() << QString("Insert new CallItem %1").arg(call->path());
     emit callsChanged();
@@ -286,7 +256,7 @@ void CallManager::proceedIncomingCall(CallItem *call)
 
 void CallManager::updateCallItems()
 {
-    TRACE
+    TRACE;
     bool changed = false;
 
     // If ofono call list is empty (no calls), empty our CallItem list too.
@@ -296,10 +266,6 @@ void CallManager::updateCallItems()
             delete item;
         d->callItems.clear();
         emit callsChanged();
-
-//        if (d->resource)
-//            d->resource->releaseResources();
-
         return;
     }
 
@@ -319,7 +285,7 @@ void CallManager::updateCallItems()
     // Insert new CallItems for paths in the ofono "calls" list we are missing
     foreach (QString path, getCalls()) {
         // Insert a new CallItem
-	if (!d->callItems.contains(path)) {
+        if (!d->callItems.contains(path)) {
             qDebug() << QString("Inserting new CallItem %1").arg(path);
             CallItem *call = new CallItem(path);
             connect (call, SIGNAL(stateChanged()),
@@ -333,9 +299,7 @@ void CallManager::updateCallItems()
             //       timeout
             if ((call->state() == STATE_INCOMING) ||
                 (call->state() == STATE_WAITING)) {
-//                if (d->resource)
-//                    d->resource->acquireIncomingResource(call);
-		proceedIncomingCall(call);
+                proceedIncomingCall(call);
             } else {
                 changed = true;
             }
@@ -348,16 +312,16 @@ void CallManager::updateCallItems()
 
 void CallManager::addCall(const QString &path)
 {
-    TRACE
+    TRACE;
     qDebug() << QString("CallAdded: \"%1\"").arg(path);
-     qDebug() <<"Call number is now "<< callCount();
+    qDebug() <<"Call number is now "<< callCount();
     updateCallItems();
     emit callCountChanged(callCount());
 }
 
 void CallManager::removeCall(const QString &path)
 {
-    TRACE
+    TRACE;
     qDebug() << QString("CallRemoved: \"%1\"").arg(path);
     qDebug() <<"Call number is now "<< callCount();
     updateCallItems();
@@ -366,13 +330,13 @@ void CallManager::removeCall(const QString &path)
 
 void CallManager::dialFinished(const bool status)
 {
-    TRACE
+    TRACE;
     qDebug() <<"Call number is now "<< callCount();
  
     if (!status) {
         qCritical() << QString("dial() Failed: %1 - %2")
-                       .arg(errorName())
-                       .arg(errorMessage());
+            .arg(errorName())
+            .arg(errorMessage());
         // Fix BMC#10848:
         // Notify that state of the call has changed when the dialing fails
         emit callsChanged();
@@ -381,114 +345,120 @@ void CallManager::dialFinished(const bool status)
 
 void CallManager::hangupAllFinished(const bool status)
 {
-    TRACE
+    TRACE;
     if (!status)
         qCritical() << QString("hangupAll() Failed: %1 - %2")
-                       .arg(errorName())
-                       .arg(errorMessage());
+            .arg(errorName())
+            .arg(errorMessage());
 
-  //If there are still calls for some reason, delete them.
-  if (callCount() > 0)
-  {
-  foreach (CallItem *item, d->callItems) {
-        disconnect(item, SIGNAL(stateChanged()));
-        disconnect(item, SIGNAL(dataChanged()));
-        delete item;
-    }
+    //If there are still calls for some reason, delete them.
+    if (callCount() > 0)
+        {
+            foreach (CallItem *item, d->callItems) {
+                disconnect(item, SIGNAL(stateChanged()));
+                disconnect(item, SIGNAL(dataChanged()));
+                delete item;
+            }
     
-    d->callItems.clear();
+            d->callItems.clear();
+            callCount();
+            emit callsChanged();
+        }
     callCount();
-    emit callsChanged();
-   }
-callCount();
 }
 
 void CallManager::swapFinished(const bool status)
 {
-    TRACE
+    TRACE;
     if (!status)
         qCritical() << QString("swapCalls() Failed: %1 - %2")
-                       .arg(errorName())
-                       .arg(errorMessage());
+            .arg(errorName())
+            .arg(errorMessage());
 }
 
 void CallManager::holdAndAnswerFinished(const bool status)
 {
-    TRACE
+    TRACE;
     if (!status)
         qCritical() << QString("HoldAndAnswer() Failed: %1 - %2")
-                       .arg(errorName())
-                       .arg(errorMessage());
+            .arg(errorName())
+            .arg(errorMessage());
 }
 
 void CallManager::transferFinished(const bool status)
 {
-    TRACE
+    TRACE;
     if (!status)
         qCritical() << QString("Transfer() Failed: %1 - %2")
-                       .arg(errorName())
-                       .arg(errorMessage());
+            .arg(errorName())
+            .arg(errorMessage());
 }
 
 void CallManager::releaseAndAnswerFinished(const bool status)
 {
-    TRACE
+    TRACE;
     if (!status)
         qCritical() << QString("ReleaseAndAnswer() Failed: %1 - %2")
-                       .arg(errorName())
-                       .arg(errorMessage());
+            .arg(errorName())
+            .arg(errorMessage());
 }
 
 void CallManager::privateChatFinished(const bool status)
 {
-    TRACE
+    TRACE;
     if (!status)
         qCritical() << QString("PrivateChat() Failed: %1 - %2")
-                       .arg(errorName())
-                       .arg(errorMessage());
+            .arg(errorName())
+            .arg(errorMessage());
 }
 
 void CallManager::createMultipartyFinished(const bool status)
 {
-    TRACE
+    TRACE;
     if (!status)
         qCritical() << QString("CreateMultiparty() Failed: %1 - %2")
-                       .arg(errorName())
-                       .arg(errorMessage());
+            .arg(errorName())
+            .arg(errorMessage());
 }
 
 void CallManager::hangupMultipartyFinished(const bool status)
 {
-    TRACE
+    TRACE;
     if (!status)
         qCritical() << QString("HangupMultiparty() Failed: %1 - %2")
-                       .arg(errorName())
-                       .arg(errorMessage());
+            .arg(errorName())
+            .arg(errorMessage());
 }
 
 void CallManager::sendTonesFinished(const bool status)
 {
-    TRACE
+    TRACE;
     if (!status)
         qCritical() << QString("SendTones() Failed: %1 - %2")
-                       .arg(errorName())
-                       .arg(errorMessage());
+            .arg(errorName())
+            .arg(errorMessage());
 }
 
 void CallManager::callStateChanged()
 {
     CallItem *call = dynamic_cast<CallItem *>(sender());
     qDebug() << QString("%1 (%2) state has changed to %3")
-                .arg(call->path())
-                .arg(call->lineID())
-                .arg(call->state());
+        .arg(call->path())
+        .arg(call->lineID())
+        .arg(call->state());
     qDebug() << "number of calls "<< callCount();
     emit callsChanged();
 }
 
 void CallManager::callMultipartyChanged()
 {
-    TRACE
+    TRACE;
     emit callsChanged();
     emit multipartyCallCountChanged(multipartyCallCount());
 }
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

@@ -17,11 +17,11 @@
 
 class DialerApplication: public QApplication
 {
-    Q_OBJECT
+    Q_OBJECT;
 
-    Q_PROPERTY(bool isConnected READ isConnected)
-    Q_PROPERTY(bool hasError READ hasError)
-    Q_PROPERTY(QString lastError READ lastError)
+    Q_PROPERTY(bool isConnected READ isConnected);
+    Q_PROPERTY(bool hasError READ hasError);
+    Q_PROPERTY(QString lastError READ lastError);
 
 public:
     DialerApplication(int &argc, char **argv);
@@ -36,11 +36,6 @@ public:
     void setError(const QString msg);
 
     bool isConnected();
-
-//    SeasideSyncModel      *seasideModel();
-//    SeasideProxyModel     *seasideProxy();
- //   HistoryTableModel     *historyModel();
- //   QSortFilterProxyModel *historyProxy();
     
 Q_SIGNALS:
     void showUi();
@@ -73,13 +68,13 @@ private:
     bool          m_connected;
     QString       m_lastError;
 
-    //SeasideSyncModel      *m_seasideModel;
-    //SeasideProxyModel     *m_seasideProxy;
-
-    //HistoryTableModel     *m_historyModel;
-   // QSortFilterProxyModel *m_historyProxy;
-
     Q_DISABLE_COPY(DialerApplication);
 };
 
 #endif // DIALERAPPLICATION_H
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

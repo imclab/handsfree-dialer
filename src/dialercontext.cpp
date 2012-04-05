@@ -47,7 +47,6 @@ public:
     OfonoCallVolume     *volumeManager;
     OfonoMessageWaiting *voicemailManager;
     CallManager         *callManager;
-//    ResourceProxy       *policyManager;
     QStringList          modes;
     MGConfItem           modesKey;
 };
@@ -73,32 +72,29 @@ DialerContext::DialerContext(QObject *parent)
 
     // OfonoModemManager signals to monitor
     connect(d->modemManager, SIGNAL(modemAdded(const QString&)),
-                             SLOT(onModemAdded(const QString&)));
+            SLOT(onModemAdded(const QString&)));
     connect(d->modemManager, SIGNAL(modemRemoved(const QString&)),
-                             SLOT(onModemRemoved(const QString&)));
+            SLOT(onModemRemoved(const QString&)));
 
     // CallManager signals to monitor
     connect(d->callManager, SIGNAL(validityChanged(bool)),
-                            SLOT(onCallManagerValidityChanged(bool)));
+            SLOT(onCallManagerValidityChanged(bool)));
     connect(d->callManager, SIGNAL(callsChanged()), SLOT(onCallsChanged()));
 
     // OfonoCallVolume signals to monitor
     connect(d->volumeManager, SIGNAL(validityChanged(bool)),
-                              SLOT(onCallVolumeValidityChanged(bool)));
+            SLOT(onCallVolumeValidityChanged(bool)));
 
     // OfonoMessageWaiting signals to monitor
     connect(d->voicemailManager, SIGNAL(validityChanged(bool)),
-                                 SLOT(onVoicemailValidityChanged(bool)));
+            SLOT(onVoicemailValidityChanged(bool)));
     connect(d->voicemailManager, SIGNAL(voicemailWaitingChanged(bool)),
-                                 SLOT(onVoicemailWaitingChanged(bool)));
+            SLOT(onVoicemailWaitingChanged(bool)));
     connect(d->voicemailManager, SIGNAL(voicemailMessageCountChanged(int)),
-                                 SLOT(onVoicemailCountChanged(int)));
+            SLOT(onVoicemailCountChanged(int)));
 
     // GConf Key change signals to monitor
     connect(&d->modesKey, SIGNAL(valueChanged()), SLOT(onModesChanged()));
-
-    // ResourceProxy is a singleton, probably don't need to store this...
-    //d->policyManager = ResourceProxy::instance();
 
     if (d->callManager)
         qDebug() << __func__ << ": Using modem - "
@@ -144,13 +140,6 @@ CallManager* DialerContext::callManager() const
     return d->callManager;
 }
 
-/*
-ResourceProxy* DialerContext::policyManager() const
-{
-    return d->policyManager;
-}
-*/
-
 QStringList DialerContext::modes() const
 {
     return d->modes;
@@ -164,70 +153,61 @@ void DialerContext::setModes(const QStringList &modelist)
 }
 
 /*
-OfonoModem* DialerContext::modem() const
-{
-    if (d->callManager)
-        return d->callManager->modem();
-    return NULL;
-}
-*/
-
-/*
  * Private methods/slots
  */
 
 void DialerContext::onModemAdded(const QString &path)
 {
-    TRACE
+    TRACE;
     // TODO: Handle modem additions, maybe...
     qWarning() << __func__ << ": Unhandled ModemAdded - " << path;
 }
 
 void DialerContext::onModemRemoved(const QString &path)
 {
-    TRACE
+    TRACE;
     // TODO: Handle modem removals, currently active for sure, others, maybe...
     qWarning() << __func__ << ": Unhandled ModemAdded - " << path;
 }
 
 void DialerContext::onCallVolumeValidityChanged(bool valid)
 {
-    TRACE
+    TRACE;
     // TODO: Reset the volumeManager service reference
     qWarning() << __func__ << ": valid? " << ((valid)?"true":"false");
 }
 
 void DialerContext::onVoicemailValidityChanged(bool valid)
 {
-    TRACE
+    TRACE;
     // TODO: Reset the voicemailManager service reference
     qWarning() << __func__ << ": valid? " << ((valid)?"true":"false");
 }
 
 void DialerContext::onVoicemailWaitingChanged(bool waiting)
 {
-    TRACE
+    TRACE;
     // TODO: Send notifications (or bubble this up for UI to handle?)
     qDebug() << __func__ << ": Messages? " << ((waiting)?"true":"false");
 }
 
 void DialerContext::onVoicemailCountChanged(int count)
 {
-    TRACE
+    TRACE;
     // TODO: Send notifications (or bubble this up for UI to handle?)
     qDebug() << __func__ << ": Message count == " << count;
 }
 
 void DialerContext::onCallManagerValidityChanged(bool valid)
 {
-    TRACE
+    TRACE;
     // TODO: Reset the callManager service reference
     qWarning() << __func__ << ": valid? " << ((valid)?"true":"false");
 }
 
 void DialerContext::onCallsChanged()
 {
-    TRACE
+    TRACE;
     // TODO: Send notifications (or bubble this up for UI to handle?)
     qDebug() << __func__ << ": Calls count == "
              << d->callManager->getCalls().count();
@@ -235,9 +215,15 @@ void DialerContext::onCallsChanged()
 
 void DialerContext::onModesChanged()
 {
-    TRACE
+    TRACE;
     setModes(d->modesKey.value().toStringList());
     // Send notification of change
     emit modesChanged();
     qDebug() << __func__ << ": New modes == " << d->modes.join(", ");
 }
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

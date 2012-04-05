@@ -17,7 +17,7 @@
 // will be !isValid()
 static QDateTime qDateTimeFromOfono(const QString &val)
 {
-    TRACE
+    TRACE;
     QDateTime result;
 
     if (val.isEmpty())
@@ -30,14 +30,14 @@ static QDateTime qDateTimeFromOfono(const QString &val)
     result = QDateTime::fromString(val,Qt::ISODate);
 #ifdef VERBOSE
     qDebug() << QString("Converted %1 with Qt::ISODate: %2")
-                       .arg(val)
-                       .arg(result.toString());
+        .arg(val)
+        .arg(result.toString());
 #endif
 
     if (!result.isValid()) {
-    // ISODate conversion has failed, fallback to manual method
-    // NOTE: QDateTime::fromString(val, Qt::ISODate) Fails since the date
-    //       format from Ofono is in RFC 822 form, but QDateTime can't parse it
+        // ISODate conversion has failed, fallback to manual method
+        // NOTE: QDateTime::fromString(val, Qt::ISODate) Fails since the date
+        //       format from Ofono is in RFC 822 form, but QDateTime can't parse it
         struct tm time_tm;
         QByteArray  bytes = val.toAscii();
         const char *str = bytes.constData();
@@ -47,15 +47,15 @@ static QDateTime qDateTimeFromOfono(const QString &val)
                 result.setTime_t(t);
 #ifdef VERBOSE 
                 qDebug() << QString("Converted %1 with strptime: %2")
-                                   .arg(val)
-                                   .arg(result.toString());
+                    .arg(val)
+                    .arg(result.toString());
 #endif
             }
         }
 
         if (!result.isValid())
             qCritical() << QString("Format error, unknown date/time: %1")
-                                  .arg(str);
+                .arg(str);
     }
 
     return result;
@@ -72,26 +72,19 @@ CallProxy::CallProxy(const QString &callPath)
       m_connected(false),
       m_multiparty(false)
 {
-    TRACE
+    TRACE;
 
-    if (!org::ofono::VoiceCall::isValid())
-    {
-	    qCritical() << QString("Failed to connect to %1 for call %2:\n\t%3")
-                       .arg(staticInterfaceName())
-                       .arg(callPath)
-                       .arg(lastError().message());
-	}
-    else {
+    if (!org::ofono::VoiceCall::isValid()) {
+        qCritical() << QString("Failed to connect to %1 for call %2:\n\t%3")
+            .arg(staticInterfaceName())
+            .arg(callPath)
+            .arg(lastError().message());
+    } else {
         QDBusPendingReply<QVariantMap> reply;
         QDBusPendingCallWatcher *watcher;
 
         reply = GetProperties();
         watcher = new QDBusPendingCallWatcher(reply);
-
-/*
-        connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)),
-                         SLOT(getPropertiesFinished(QDBusPendingCallWatcher*)));
-*/
 
         // Force this to be sync to ensure we have initial properties
         watcher->waitForFinished();
@@ -102,22 +95,23 @@ CallProxy::CallProxy(const QString &callPath)
                     SIGNAL(PropertyChanged(const QString&,const QDBusVariant&)),
                     SLOT(propertyChanged(const QString&,const QDBusVariant&)));
             connect(this, SIGNAL(DisconnectReason(const QString&)),
-                          SLOT(disconnectReason(const QString&)));
-        } else
+                    SLOT(disconnectReason(const QString&)));
+        } else {
             qCritical() << QString("Invalid CallProxy instance: state == %1")
-                           .arg(m_state);
+                .arg(m_state);
+        }
     }
 }
 
 CallProxy::~CallProxy()
 {
-    TRACE
+    TRACE;
     // FIXME: Do something here!!!
 }
 
 bool CallProxy::isValid()
 {
-    TRACE
+    TRACE;
     return (org::ofono::VoiceCall::isValid() &&
             m_connected &&
             (m_state != "disconnected"));
@@ -125,31 +119,31 @@ bool CallProxy::isValid()
 
 QString CallProxy::lineID() const
 {
-    TRACE
+    TRACE;
     return m_lineid;
 }
 
 QString CallProxy::name() const
 {
-    TRACE
+    TRACE;
     return m_name;
 }
 
 QString CallProxy::state() const
 {
-    TRACE
+    TRACE;
     return m_state;
 }
 
 QDateTime CallProxy::startTime() const
 {
-    TRACE
+    TRACE;
     return m_startTime;
 }
 
 int CallProxy::duration() const
 {
-    TRACE
+    TRACE;
     if (m_startTime.isValid())
         return m_startTime.secsTo(QDateTime::currentDateTime());
     else
@@ -158,56 +152,39 @@ int CallProxy::duration() const
 
 QString CallProxy::reason() const
 {
-    TRACE
+    TRACE;
     return m_reason;
 }
 
 bool CallProxy::multiparty() const
 {
-    TRACE
+    TRACE;
     return m_multiparty;
 }
 
 void CallProxy::answer()
 {
-    TRACE
-
-//    ResourceProxy *resource = ResourceProxy::instance();
-
-//    connect(resource, SIGNAL(answerResourceAcquired()), SLOT(proceedCallAnswer()));
-//    connect(resource, SIGNAL(answerResourceDenied()), SLOT(deniedCallAnswer()));
-
-//    resource->acquireAnswerResource();
-
-proceedCallAnswer();
+    TRACE;
+    proceedCallAnswer();
 }
 
 void CallProxy::proceedCallAnswer()
 {
-    TRACE
+    TRACE;
 
-//    ResourceProxy *resource = ResourceProxy::instance();
     QDBusPendingReply<QDBusObjectPath> reply;
     QDBusPendingCallWatcher *watcher;
-
- //   disconnect(resource, SIGNAL(answerResourceAcquired()));
- //   disconnect(resource, SIGNAL(answerResourceDenied()));
 
     reply = Answer();
     watcher = new QDBusPendingCallWatcher(reply);
 
     connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)),
-                     SLOT(answerFinished(QDBusPendingCallWatcher*)));
+            SLOT(answerFinished(QDBusPendingCallWatcher*)));
 }
 
 void CallProxy::deniedCallAnswer()
 {
-    TRACE
-
-//    ResourceProxy *resource = ResourceProxy::instance();
-
-//    disconnect(resource, SIGNAL(answerResourceAcquired()));
-//    disconnect(resource, SIGNAL(answerResourceDenied()));
+    TRACE;
 
     // Hang up the incoming call, if resources to accept it are inavailabe
     hangup();
@@ -217,7 +194,7 @@ void CallProxy::deniedCallAnswer()
 
 void CallProxy::deflect(const QString toNumber)
 {
-    TRACE
+    TRACE;
 
     QDBusPendingReply<QDBusObjectPath> reply;
     QDBusPendingCallWatcher *watcher;
@@ -226,12 +203,12 @@ void CallProxy::deflect(const QString toNumber)
     watcher = new QDBusPendingCallWatcher(reply);
 
     connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)),
-                     SLOT(deflectFinished(QDBusPendingCallWatcher*)));
+            SLOT(deflectFinished(QDBusPendingCallWatcher*)));
 }
 
 void CallProxy::hangup()
 {
-    TRACE
+    TRACE;
 
     QDBusPendingReply<> reply;
     QDBusPendingCallWatcher *watcher;
@@ -240,20 +217,20 @@ void CallProxy::hangup()
     watcher = new QDBusPendingCallWatcher(reply);
 
     connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)),
-                     SLOT(hangupFinished(QDBusPendingCallWatcher*)));
+            SLOT(hangupFinished(QDBusPendingCallWatcher*)));
 }
 
 void CallProxy::getPropertiesFinished(QDBusPendingCallWatcher *watcher)
 {
-    TRACE
+    TRACE;
 
     QDBusPendingReply<QVariantMap> reply = *watcher;
 
     if (reply.isError()) {
         qCritical() << QString("Failed to connect to %1 for call %2:\n\t%3")
-                       .arg(staticInterfaceName())
-                       .arg(path())
-                       .arg(lastError().message());
+            .arg(staticInterfaceName())
+            .arg(path())
+            .arg(lastError().message());
         return;
     }
 
@@ -276,37 +253,37 @@ void CallProxy::getPropertiesFinished(QDBusPendingCallWatcher *watcher)
 
 void CallProxy::answerFinished(QDBusPendingCallWatcher *watcher)
 {
-    TRACE
+    TRACE;
     QDBusPendingReply<QDBusObjectPath> reply = *watcher;
     if (reply.isError())
         qCritical() << QString("Answer() Failed: %1 - %2")
-                       .arg(reply.error().name())
-                       .arg(reply.error().message());
+            .arg(reply.error().name())
+            .arg(reply.error().message());
 }
 
 void CallProxy::deflectFinished(QDBusPendingCallWatcher *watcher)
 {
-    TRACE
+    TRACE;
     QDBusPendingReply<QDBusObjectPath> reply = *watcher;
     if (reply.isError())
         qCritical() << QString("Deflect() Failed: %1 - %2")
-                       .arg(reply.error().name())
-                       .arg(reply.error().message());
+            .arg(reply.error().name())
+            .arg(reply.error().message());
 }
 
 void CallProxy::hangupFinished(QDBusPendingCallWatcher *watcher)
 {
-    TRACE
+    TRACE;
     QDBusPendingReply<> reply = *watcher;
     if (reply.isError())
         qCritical() << QString("Hangup() Failed: %1 - %2")
-                       .arg(reply.error().name())
-                       .arg(reply.error().message());
+            .arg(reply.error().name())
+            .arg(reply.error().message());
 }
 
 void CallProxy::propertyChanged(const QString &in0, const QDBusVariant &in1)
 {
-    TRACE
+    TRACE;
 
     if (in0 == "LineIdentification") {
         m_lineid = qdbus_cast<QString>(in1.variant());
@@ -326,14 +303,14 @@ void CallProxy::propertyChanged(const QString &in0, const QDBusVariant &in1)
 
 void CallProxy::disconnectReason(const QString &in0)
 {
-    TRACE
+    TRACE;
     m_reason = in0;
     emit callDisconnected(in0);
 }
 
 void CallProxy::setStartTimeFromString(const QString &val)
 {
-    TRACE
+    TRACE;
     if (val.isEmpty())
         return;
 
@@ -343,3 +320,8 @@ void CallProxy::setStartTimeFromString(const QString &val)
         m_startTime = QDateTime::QDateTime::currentDateTime();
 }
 
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

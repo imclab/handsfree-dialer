@@ -14,12 +14,12 @@
 
 class DBusDialerAdapter : public QDBusAbstractAdaptor
 {
-    Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "com.tizen.hfdialer")
+    Q_OBJECT;
+    Q_CLASSINFO("D-Bus Interface", "com.tizen.hfdialer");
 
 public:
     explicit DBusDialerAdapter(DialerApplication *application);
-            ~DBusDialerAdapter();
+    ~DBusDialerAdapter();
 
 Q_SIGNALS:
 
@@ -28,3 +28,9 @@ public Q_SLOTS:
 };
 
 #endif // DBUSDIALERADAPTER_H
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

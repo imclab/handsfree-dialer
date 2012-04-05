@@ -20,7 +20,7 @@
 
 int main(int argc, char *argv[])
 {
-    TRACE
+    TRACE;
     DialerApplication app(argc, argv);  
 
     QMLMainWindow *qmw = QMLMainWindow::instance();
@@ -31,14 +31,19 @@ int main(int argc, char *argv[])
 
 QString stripLineID(QString lineid)
 {
-    TRACE
+    TRACE;
     static QRegExp rx = QRegExp("([^0-9*#])");
 
     if (lineid.indexOf('+') == 0) {
         lineid.replace(rx, "");
         return lineid.insert(0,"+");
-    }
-    else
+    } else {
         return lineid.replace(rx, "");
+    }
 }
 
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

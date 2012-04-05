@@ -30,7 +30,7 @@ public:
           engine(NULL),
           component(NULL),
           item(NULL)
-    { TRACE }
+    { TRACE; }
 
     QMLDialer               *adapter;
     QDeclarativeEngine      *engine;
@@ -42,7 +42,7 @@ public:
 
 static void registerDataTypes()
 {
-    TRACE
+    TRACE;
     qmlRegisterType<QMLDialer>("com.tizen.hfdialer", 1, 0, "Dialer");
 
     qmlRegisterUncreatableType<QMLCallItem>("com.tizen.hfdialer", 1, 0, "CallItem", "");
@@ -52,7 +52,7 @@ QMLMainWindow::QMLMainWindow(QWidget *parent)
     : QDeclarativeView(parent),
       d(new QMLMainWindowPrivate)
 {
-    TRACE
+    TRACE;
     DialerApplication *da = DialerApplication::instance();
     CallManager *cm = ManagerProxy::instance()->callManager();
 
@@ -69,20 +69,20 @@ QMLMainWindow::QMLMainWindow(QWidget *parent)
 
 QMLMainWindow::~QMLMainWindow()
 {
-    TRACE
+    TRACE;
     delete this->d;
 }
 
 QMLMainWindow* QMLMainWindow::instance()
 {
-    TRACE
+    TRACE;
     static QMLMainWindow *_instance = NULL;
 
     if(_instance == NULL)
-    {
-        registerDataTypes();
-        _instance = new QMLMainWindow;
-    }
+        {
+            registerDataTypes();
+            _instance = new QMLMainWindow;
+        }
 
     return _instance;
 }
@@ -90,21 +90,21 @@ QMLMainWindow* QMLMainWindow::instance()
 
 QMLMainWindow* QMLMainWindow::instanceP(QWidget* parent)
 {
-    TRACE
+    TRACE;
     static QMLMainWindow *_instance = NULL;
 
     if(_instance == NULL)
-    {
-        registerDataTypes();
-        _instance = new QMLMainWindow(parent);
-    }
+        {
+            registerDataTypes();
+            _instance = new QMLMainWindow(parent);
+        }
 
     return _instance;
 }
 
 void QMLMainWindow::setupUi()
 {
-    TRACE
+    TRACE;
     MGConfItem qmlUrl(CONFIG_KEY_QML_LOAD_URL);
 
     d->engine = new QDeclarativeEngine(this);
@@ -112,68 +112,65 @@ void QMLMainWindow::setupUi()
     d->engine->addImportPath("/usr/share/hfdialer/qml/base");
 
     d->engine->rootContext()->setContextProperty("controller", this); //TODO: Remove
-   // d->engine->rootContext()->setContextProperty("History", DialerApplication::instance()->historyProxy());
     this->setSource(QUrl::fromLocalFile("/usr/share/hfdialer/qml/main.qml"));
-    //this->setResizeMode(QDeclarativeView::SizeRootObjectToView);
-    //this->setSize(this->geometry);
     d->component = new QDeclarativeComponent(d->engine, this);
     d->component->loadUrl(qmlUrl.value(DEFAULT_QML_LOAD_URL).toString());
 
     if(d->component->isError())
-    {
-        qCritical() << "Failed to load QML Component:" << d->component->errorString();
-        return;
-    }
+        {
+            qCritical() << "Failed to load QML Component:" << d->component->errorString();
+            return;
+        }
 
     d->item = qobject_cast<QDeclarativeItem*>(d->component->create());
     if(!d->item)
-    {
-        qCritical() << "Failed to create item from component!";
-        return;
-    }
+        {
+            qCritical() << "Failed to create item from component!";
+            return;
+        }
 }
 
 void QMLMainWindow::tryToShow()
 {
-    TRACE
+    TRACE;
      
-   if (d->component->isReady())
-    {
-        DialerApplication *da = DialerApplication::instance();
-	da->setActiveWindow(this);
-        da->activeWindow()->show();
-	da->activeWindow()->activateWindow();
-	da->activeWindow()->raise();
-	this->show();
-    }
+    if (d->component->isReady())
+        {
+            DialerApplication *da = DialerApplication::instance();
+            da->setActiveWindow(this);
+            da->activeWindow()->show();
+            da->activeWindow()->activateWindow();
+            da->activeWindow()->raise();
+            this->show();
+        }
  
 }
 void QMLMainWindow::hide()
 {
-    TRACE
+    TRACE;
     QGraphicsView::hide();
 }
 
 void QMLMainWindow::closeEvent(QCloseEvent *event)
 {
-    TRACE
-/*    if(this->closeOnLazyShutdown())
-    {
-        this->setCloseOnLazyShutdown(false);
-    }
-*/
+    TRACE;
     event->accept();
 
 }
 
 void QMLMainWindow::onGeometryChanged()
 {
-    TRACE
-   // d->item->setSize(d->widget->size());
+    TRACE;
 }
 
 void QMLMainWindow::setAdapter(QMLDialer *adapter)
 {
-    TRACE
+    TRACE;
     d->adapter = adapter;
 }
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

@@ -18,21 +18,19 @@
 
 // local headers
 #include "callmanager.h"
-//#include "resourceproxy.h"
 
 // Convienence Macro for access to Class instance
 #define DC DialerContext::instance()
 
 class DialerContext: public QObject
 {
-    Q_OBJECT
+    Q_OBJECT;
 
-    Q_PROPERTY(OfonoModemManager* modemManager READ modemManager)
-    Q_PROPERTY(OfonoCallVolume* volumeManager READ volumeManager)
-    Q_PROPERTY(OfonoMessageWaiting* voicemailManager READ voicemailManager)
-    Q_PROPERTY(CallManager* callManager READ callManager)
-//    Q_PROPERTY(ResourceProxy* policyManager READ policyManager)
-    Q_PROPERTY(QStringList modes READ modes WRITE setModes)
+    Q_PROPERTY(OfonoModemManager* modemManager READ modemManager);
+    Q_PROPERTY(OfonoCallVolume* volumeManager READ volumeManager);
+    Q_PROPERTY(OfonoMessageWaiting* voicemailManager READ voicemailManager);
+    Q_PROPERTY(CallManager* callManager READ callManager);
+    Q_PROPERTY(QStringList modes READ modes WRITE setModes);
 
 public:
     virtual ~DialerContext();
@@ -43,7 +41,6 @@ public:
     OfonoCallVolume*     volumeManager() const;
     OfonoMessageWaiting* voicemailManager() const;
     CallManager*         callManager() const;
-    //ResourceProxy*       policyManager() const;
     QStringList          modes() const;
 
 public slots:
@@ -87,3 +84,9 @@ private:
 };
 
 #endif // DIALERCONTEXT_H
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

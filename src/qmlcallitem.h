@@ -18,21 +18,20 @@
 
 class QMLCallItem : public QObject
 {
-    Q_OBJECT
+    Q_OBJECT;
 
-    Q_PROPERTY(QString msisdn READ msisdn)
-    Q_PROPERTY(QString name READ name)
-    Q_PROPERTY(QString state READ state NOTIFY stateChanged)
-    Q_PROPERTY(QString reason READ reason)
-    Q_PROPERTY(int numberLen READ numberLen)
-    Q_PROPERTY(QDateTime startedAt READ startedAt)
-    Q_PROPERTY(int duration READ duration)
-
-    Q_PROPERTY(bool isMultiparty READ isMultiparty)
+    Q_PROPERTY(QString msisdn READ msisdn);
+    Q_PROPERTY(QString name READ name);
+    Q_PROPERTY(QString state READ state NOTIFY stateChanged);
+    Q_PROPERTY(QString reason READ reason);
+    Q_PROPERTY(int numberLen READ numberLen);
+    Q_PROPERTY(QDateTime startedAt READ startedAt);
+    Q_PROPERTY(int duration READ duration);
+    Q_PROPERTY(bool isMultiparty READ isMultiparty);
 
 public:
     explicit QMLCallItem(CallItem *proxy, QObject *parent = 0);
-            ~QMLCallItem();
+    ~QMLCallItem();
 
     QString      msisdn         () const;
     int	 	numberLen	() const;
@@ -61,7 +60,13 @@ protected Q_SLOTS:
 private:
     class QMLCallItemPrivate *d;
 
-    Q_DISABLE_COPY(QMLCallItem)
+    Q_DISABLE_COPY(QMLCallItem);
 };
 
 #endif // QMLCALLITEM_H
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

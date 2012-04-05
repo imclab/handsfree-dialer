@@ -20,15 +20,15 @@
 
 class ModemProxy: public org::ofono::Modem
 {
-    Q_OBJECT
-    Q_PROPERTY(QStringList interfaces READ interfaces)
-    Q_PROPERTY(QString path READ path)
-    Q_PROPERTY(QString manufacturer READ manufacturer)
-    Q_PROPERTY(QString model READ model)
-    Q_PROPERTY(QString revision READ revision)
-    Q_PROPERTY(QString serial READ serial)
-    Q_PROPERTY(bool powered READ powered WRITE setPowered)
-    Q_PROPERTY(bool online READ online WRITE setOnline)
+    Q_OBJECT;
+    Q_PROPERTY(QStringList interfaces READ interfaces);
+    Q_PROPERTY(QString path READ path);
+    Q_PROPERTY(QString manufacturer READ manufacturer);
+    Q_PROPERTY(QString model READ model);
+    Q_PROPERTY(QString revision READ revision);
+    Q_PROPERTY(QString serial READ serial);
+    Q_PROPERTY(bool powered READ powered WRITE setPowered);
+    Q_PROPERTY(bool online READ online WRITE setOnline);
 
 public:
     ModemProxy(const QString &objectPath);
@@ -75,12 +75,12 @@ private:
 
 class VoicemailProxy: public org::ofono::MessageWaiting
 {
-    Q_OBJECT
+    Q_OBJECT;
 
-    Q_PROPERTY(bool isConnected READ isConnected NOTIFY connected)
-    Q_PROPERTY(bool waiting READ waiting)
-    Q_PROPERTY(int count  READ count)
-    Q_PROPERTY(QString mailbox READ mailbox WRITE setMailbox)
+    Q_PROPERTY(bool isConnected READ isConnected NOTIFY connected);
+    Q_PROPERTY(bool waiting READ waiting);
+    Q_PROPERTY(int count  READ count);
+    Q_PROPERTY(QString mailbox READ mailbox WRITE setMailbox);
 
 public:
     VoicemailProxy(const QString &objectPath);
@@ -117,11 +117,11 @@ private:
 
 class VolumeManager: public org::ofono::CallVolume
 {
-    Q_OBJECT
-    Q_PROPERTY(int speakerVolume READ speakerVolume WRITE setSpeakerVolume)
-    Q_PROPERTY(int micVolume READ micVolume WRITE setMicVolume)
-    Q_PROPERTY(bool muted READ muted WRITE setMuted)
-    Q_PROPERTY(bool isConnected READ isConnected)
+    Q_OBJECT;
+    Q_PROPERTY(int speakerVolume READ speakerVolume WRITE setSpeakerVolume);
+    Q_PROPERTY(int micVolume READ micVolume WRITE setMicVolume);
+    Q_PROPERTY(bool muted READ muted WRITE setMuted);
+    Q_PROPERTY(bool isConnected READ isConnected);
 
 public:
     VolumeManager(const QString &objectPath);
@@ -156,3 +156,9 @@ private:
 };
 
 #endif
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

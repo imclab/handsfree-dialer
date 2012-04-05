@@ -56,9 +56,9 @@ static void pa_sourcelist_cb(pa_context *c, const pa_source_info *l, int is_last
     source = new PADevice();
     source->index = l->index;
     if(l->name != NULL)
-       source->name = l->name;
+        source->name = l->name;
     if(l->description != NULL)
-       source->description = l->description;
+        source->description = l->description;
     paControl->addSource(source);
 }
 
@@ -73,13 +73,12 @@ static void pa_sinklist_cb(pa_context *c, const pa_sink_info *l, int is_last, vo
         return;
     }
 
-    //qDebug() << "pa_sinklist_cb() Sink added: " << l->name;
     sink = new PADevice();
     sink->index = l->index;
     if(l->name != NULL)
-       sink->name = l->name;
+        sink->name = l->name;
     if(l->description != NULL)
-       sink->description = l->description;
+        sink->description = l->description;
     paControl->addSink(sink);
 }
 
@@ -94,13 +93,12 @@ static void pa_modulelist_cb(pa_context *c, const pa_module_info *i, int is_last
         return;
     }
 
-    //qDebug() << "pa_modulelist_cb() Module added: " << i->name;
     module = new PAModule();
     module->index = i->index;
     if(i->name != NULL)
-       module->name = i->name;
+        module->name = i->name;
     if(i->argument != NULL)
-       module->argument = i->argument;
+        module->argument = i->argument;
     paControl->addModule(module);
 }
 
@@ -108,48 +106,48 @@ static void pa_state_cb(pa_context *c, void *) {
 
     pa_context_state_t state = pa_context_get_state(c);
     if(state == PA_CONTEXT_READY)
-    {
-        paControl->setState(true);
-        pa_context_set_subscribe_callback(c, pa_subscribed_events_cb, NULL);
-        pa_operation *o;
-        if (!(o = pa_context_subscribe(c, (pa_subscription_mask_t)
-            (PA_SUBSCRIPTION_MASK_MODULE|
-            PA_SUBSCRIPTION_MASK_SINK|
-            PA_SUBSCRIPTION_MASK_SOURCE|
-            PA_SUBSCRIPTION_MASK_SINK_INPUT|
-            PA_SUBSCRIPTION_MASK_SOURCE_OUTPUT), NULL, NULL))) {
+        {
+            paControl->setState(true);
+            pa_context_set_subscribe_callback(c, pa_subscribed_events_cb, NULL);
+            pa_operation *o;
+            if (!(o = pa_context_subscribe(c, (pa_subscription_mask_t)
+                                           (PA_SUBSCRIPTION_MASK_MODULE|
+                                            PA_SUBSCRIPTION_MASK_SINK|
+                                            PA_SUBSCRIPTION_MASK_SOURCE|
+                                            PA_SUBSCRIPTION_MASK_SINK_INPUT|
+                                            PA_SUBSCRIPTION_MASK_SOURCE_OUTPUT), NULL, NULL))) {
                 qWarning("pa_context_subscribe() failed");
             }
-        if(o) pa_operation_unref(o);
-        ///Get an initial list of sinks, sources and modules.
-        paControl->addRef();
-        pa_context_get_sink_info_list(c, pa_sinklist_cb, NULL);
-        paControl->addRef();
-        pa_context_get_source_info_list(c, pa_sourcelist_cb, NULL);
-        paControl->addRef();
-        pa_context_get_module_info_list(c, pa_modulelist_cb, NULL);
-    }
+            if(o) pa_operation_unref(o);
+            ///Get an initial list of sinks, sources and modules.
+            paControl->addRef();
+            pa_context_get_sink_info_list(c, pa_sinklist_cb, NULL);
+            paControl->addRef();
+            pa_context_get_source_info_list(c, pa_sourcelist_cb, NULL);
+            paControl->addRef();
+            pa_context_get_module_info_list(c, pa_modulelist_cb, NULL);
+        }
     else if(state == PA_CONTEXT_FAILED)
-    {
-        ///Pulseaudio crashed?
-        paControl->setState(false);
-    }
+        {
+            ///Pulseaudio crashed?
+            paControl->setState(false);
+        }
     else
-    {
-        qDebug()<<"PA state: "<<(int) state;
-    }
+        {
+            qDebug()<<"PA state: "<<(int) state;
+        }
 }
 
 static void pa_subscribed_events_cb(pa_context *c, enum pa_subscription_event_type t, uint32_t , void *)
 {
     switch (t & PA_SUBSCRIPTION_EVENT_FACILITY_MASK)
-    {
+        {
         case PA_SUBSCRIPTION_EVENT_SINK:
             qDebug("PA_SUBSCRIPTION_EVENT_SINK event triggered");
             foreach(PADevice* dev, paControl->sinkList)
-            {
-                delete dev;
-            }
+                {
+                    delete dev;
+                }
             paControl->sinkList.clear();
             paControl->addRef();
             pa_context_get_sink_info_list(c, pa_sinklist_cb, NULL);
@@ -157,9 +155,9 @@ static void pa_subscribed_events_cb(pa_context *c, enum pa_subscription_event_ty
         case PA_SUBSCRIPTION_EVENT_SOURCE:
             qDebug("PA_SUBSCRIPTION_EVENT_SOURCE event triggered");
             foreach(PADevice* dev, paControl->sourceList)
-            {
-                delete dev;
-            }
+                {
+                    delete dev;
+                }
             paControl->sourceList.clear();
             paControl->addRef();
             pa_context_get_source_info_list(c, pa_sourcelist_cb, NULL);
@@ -167,14 +165,14 @@ static void pa_subscribed_events_cb(pa_context *c, enum pa_subscription_event_ty
         case PA_SUBSCRIPTION_EVENT_MODULE:
             qDebug("PA_SUBSCRIPTION_EVENT_MODULE event triggered");
             foreach(PAModule* dev, paControl->moduleList)
-            {
-                delete dev;
-            }
+                {
+                    delete dev;
+                }
             paControl->moduleList.clear();
             paControl->addRef();
             pa_context_get_module_info_list(c, pa_modulelist_cb, NULL);
             break;
-    }
+        }
 }
 
 PAControl::PAControl(QObject *parent)
@@ -219,18 +217,18 @@ void PAControl::paInit() {
     if(!pa_ml)
         pa_ml = pa_glib_mainloop_new(NULL);
     pa_ctx = pa_context_new(
-            pa_glib_mainloop_get_api(pa_ml),
-            "com.tizen.hfp");
+                            pa_glib_mainloop_get_api(pa_ml),
+                            "com.tizen.hfp");
 
     // This function connects to the pulse server
     if (pa_context_connect(pa_ctx,
                            NULL,
                            PA_CONTEXT_NOFAIL, NULL) < 0)
-    {
-        qCritical("PulseAudioService: pa_context_connect() failed");
-        paCleanup();
-        return;
-    }
+        {
+            qCritical("PulseAudioService: pa_context_connect() failed");
+            paCleanup();
+            return;
+        }
 
     m_refCounter = 0;
     m_connected = false;
@@ -251,11 +249,11 @@ void PAControl::paCleanup() {
 
 void PAControl::setState(bool state)
 {
-     m_paState = state;
-     if(state == false)
-     {
-         emit paFailed();
-     }
+    m_paState = state;
+    if(state == false)
+        {
+            emit paFailed();
+        }
 }
 
 void PAControl::addRef()
@@ -281,13 +279,13 @@ void PAControl::reconnect() {
 PADevice* PAControl::findBluezSource() {
 
     if (sourceList.size() == 0)
-    {
-        addRef();
-        pa_op = pa_context_get_source_info_list(pa_ctx, pa_sourcelist_cb, NULL);
-        if(pa_op) pa_operation_unref(pa_op);
+        {
+            addRef();
+            pa_op = pa_context_get_source_info_list(pa_ctx, pa_sourcelist_cb, NULL);
+            if(pa_op) pa_operation_unref(pa_op);
 
-        return NULL;
-    }
+            return NULL;
+        }
 
     foreach (PADevice *source, sourceList) {
         QString name = source->name;
@@ -305,16 +303,16 @@ PADevice* PAControl::findBluezSource() {
 PADevice*  PAControl::findBluezSink() {
 
     if (sinkList.size() == 0)
-    {
-        addRef();
-        pa_op = pa_context_get_sink_info_list(pa_ctx, pa_sinklist_cb, NULL);
-       if(pa_op) pa_operation_unref(pa_op);
+        {
+            addRef();
+            pa_op = pa_context_get_sink_info_list(pa_ctx, pa_sinklist_cb, NULL);
+            if(pa_op) pa_operation_unref(pa_op);
 
-       return NULL;
-    }
+            return NULL;
+        }
 
     foreach (PADevice *sink, sinkList) {
-       QString name = sink->name;
+        QString name = sink->name;
 
         if (name.startsWith(QString("bluez_sink."), Qt::CaseSensitive)) {
             qDebug() << QString("   Matched Bluez sink: ") << name;
@@ -329,29 +327,29 @@ PADevice*  PAControl::findBluezSink() {
 PADevice* PAControl::findAlsaSource(QString alsasource) {
 
     if (sourceList.size() == 0)
-    {
-        addRef();
-        pa_op = pa_context_get_source_info_list(pa_ctx, pa_sourcelist_cb, NULL);
-        if(pa_op) pa_operation_unref(pa_op);
+        {
+            addRef();
+            pa_op = pa_context_get_source_info_list(pa_ctx, pa_sourcelist_cb, NULL);
+            if(pa_op) pa_operation_unref(pa_op);
 
-        return NULL;
-    }
+            return NULL;
+        }
 
     foreach (PADevice *source, sourceList) {
         qDebug() << QString("Alsa source: ") << source->name;
         QString name = source->name;
 
         if (!alsasource.isNull() && !alsasource.isEmpty())
-        {
-            // if alsa source name is provided
-            if (alsasource == name)
             {
-                qDebug() << QString("   Matched Alsa source: ") << name;
-                return source;
-            }
-        } else if (name.startsWith(QString("alsa_input."), Qt::CaseSensitive) &&
-            name.endsWith(QString("analog-stereo"), Qt::CaseSensitive) &&
-            !name.contains(QString("timb"))) {
+                // if alsa source name is provided
+                if (alsasource == name)
+                    {
+                        qDebug() << QString("   Matched Alsa source: ") << name;
+                        return source;
+                    }
+            } else if (name.startsWith(QString("alsa_input."), Qt::CaseSensitive) &&
+                       name.endsWith(QString("analog-stereo"), Qt::CaseSensitive) &&
+                       !name.contains(QString("timb"))) {
             // this is default behavior, it will try to look up one
             qDebug() << QString("   Matched Alsa source: ") << name;
             return source;
@@ -365,29 +363,29 @@ PADevice* PAControl::findAlsaSource(QString alsasource) {
 PADevice*  PAControl::findAlsaSink(QString alsasink) {
 
     if (sinkList.size() == 0)
-    {
-        addRef();
-        pa_op = pa_context_get_sink_info_list(pa_ctx, pa_sinklist_cb, NULL);
-        if(pa_op) pa_operation_unref(pa_op);
+        {
+            addRef();
+            pa_op = pa_context_get_sink_info_list(pa_ctx, pa_sinklist_cb, NULL);
+            if(pa_op) pa_operation_unref(pa_op);
 
-        return NULL;
-    }
+            return NULL;
+        }
 
     foreach (PADevice *sink, sinkList) {
         qDebug() << QString("Alsa sink: ") << sink->name;
         QString name = sink->name;
 
         if (!alsasink.isNull() && !alsasink.isEmpty())
-        {
-            // if alsa sink name is provided
-            if (alsasink == name)
             {
-                qDebug() << QString("   Matched Alsa sink: ") << name;
-                return sink;
-            }
-        } else if (name.startsWith(QString("alsa_output."), Qt::CaseSensitive) &&
-            name.endsWith(QString("analog-stereo"), Qt::CaseSensitive) &&
-            !name.contains(QString("timb"))) {
+                // if alsa sink name is provided
+                if (alsasink == name)
+                    {
+                        qDebug() << QString("   Matched Alsa sink: ") << name;
+                        return sink;
+                    }
+            } else if (name.startsWith(QString("alsa_output."), Qt::CaseSensitive) &&
+                       name.endsWith(QString("analog-stereo"), Qt::CaseSensitive) &&
+                       !name.contains(QString("timb"))) {
             // this is default behavior, it will try to look up one
             qDebug() << QString("   Matched Alsa sink: ") << name;
             return sink;
@@ -401,13 +399,13 @@ PADevice*  PAControl::findAlsaSink(QString alsasink) {
 PAModule*  PAControl::findModule(QString name, QString pattern) {
 
     if (moduleList.size() == 0)
-    {
-        addRef();
-        pa_op = pa_context_get_module_info_list(pa_ctx, pa_modulelist_cb, NULL);
-        if(pa_op) pa_operation_unref(pa_op);
+        {
+            addRef();
+            pa_op = pa_context_get_module_info_list(pa_ctx, pa_modulelist_cb, NULL);
+            if(pa_op) pa_operation_unref(pa_op);
 
-        return NULL;
-    }
+            return NULL;
+        }
 
     foreach (PAModule *module, moduleList) {
         if (module->name.contains(name) && module->argument.contains(pattern)) {
@@ -424,11 +422,11 @@ PAModule*  PAControl::findModule(QString name, QString pattern) {
 QList<PAModule*> PAControl::getAllModules()
 {
     if (moduleList.size() == 0)
-    {
-        addRef();
-        pa_op = pa_context_get_module_info_list(pa_ctx, pa_modulelist_cb, NULL);
-        if(pa_op) pa_operation_unref(pa_op);
-    }
+        {
+            addRef();
+            pa_op = pa_context_get_module_info_list(pa_ctx, pa_modulelist_cb, NULL);
+            if(pa_op) pa_operation_unref(pa_op);
+        }
 
     return moduleList;
 }
@@ -436,13 +434,13 @@ QList<PAModule*> PAControl::getAllModules()
 void PAControl::addSource(PADevice* device)
 {
     foreach(PADevice* dev, sourceList)
-    {
-        if(dev->name == device->name)
         {
-            delete device;
-            return; /// already exists
+            if(dev->name == device->name)
+                {
+                    delete device;
+                    return; /// already exists
+                }
         }
-    }
 
     sourceList.append(device);
     emit sourceAppeared(device);
@@ -451,13 +449,13 @@ void PAControl::addSource(PADevice* device)
 void PAControl::addSink(PADevice* device)
 {
     foreach(PADevice* dev, sinkList)
-    {
-        if(dev->name == device->name)
         {
-            delete device;
-            return; /// already exists
+            if(dev->name == device->name)
+                {
+                    delete device;
+                    return; /// already exists
+                }
         }
-    }
 
     sinkList.append(device);
     emit sinkAppeared(device);
@@ -466,13 +464,13 @@ void PAControl::addSink(PADevice* device)
 void PAControl::addModule(PAModule *module)
 {
     foreach(PAModule* dev, moduleList)
-    {
-        if(dev->name == module->name && dev->index == module->index)
         {
-            delete module;
-            return; /// already exists
+            if(dev->name == module->name && dev->index == module->index)
+                {
+                    delete module;
+                    return; /// already exists
+                }
         }
-    }
 
     moduleList.append(module);
     emit moduleAppeared(module);
@@ -516,10 +514,10 @@ PAStatus PAControl::getStatus() {
 
 void PAControl::setErrorMsg(QString msg) {
     if (msg != NULL)
-    {
-        this->status = ERROR;
-        this->errorMsg = msg;
-    }
+        {
+            this->status = ERROR;
+            this->errorMsg = msg;
+        }
 }
 
 QString PAControl::getErrorMsg() {
@@ -533,21 +531,21 @@ void PAControl::onSourceAppeared(PADevice* device) {
         return;
 
     if(cm->callCount() == 0)
-    {
-        qDebug() << "no calls active, ignore";
-        return;
-    }
+        {
+            qDebug() << "no calls active, ignore";
+            return;
+        }
 
     if(device->name.contains("bluez_source"))
-    {
-        m_btSourceReady = true;
-    }
+        {
+            m_btSourceReady = true;
+        }
 
     if(!m_audioRouted && m_btSourceReady && m_btSinkReady)
-    {
-        qDebug() << QString("Route microphone and speakers");
-        routeAudio();
-    }
+        {
+            qDebug() << QString("Route microphone and speakers");
+            routeAudio();
+        }
 }
 
 void PAControl::onSinkAppeared(PADevice* device) {
@@ -556,21 +554,21 @@ void PAControl::onSinkAppeared(PADevice* device) {
         return;
 
     if(cm->callCount() == 0)
-    {
-        qDebug() << "no calls active, ignore";
-        return;
-    }
+        {
+            qDebug() << "no calls active, ignore";
+            return;
+        }
 
     if((device)->name.contains("bluez_sink"))
-    {
-        m_btSinkReady = true;
-    }
+        {
+            m_btSinkReady = true;
+        }
 
     if(!m_audioRouted && m_btSourceReady && m_btSinkReady)
-    {
-        qDebug() << QString("Route microphone and speakers");
-        routeAudio();
-    }
+        {
+            qDebug() << QString("Route microphone and speakers");
+            routeAudio();
+        }
 }
 
 void PAControl::routeAudio()
@@ -581,17 +579,17 @@ void PAControl::routeAudio()
     PADevice* speaker;
 
     if (m_audioRouted)
-    {
-        qDebug() << QString("Audio already routed");
-        return;
-    }
+        {
+            qDebug() << QString("Audio already routed");
+            return;
+        }
 
     if (m_refCounter > 0)
-    {
-        qDebug() << "PA callback not finished, retry";
-        QTimer::singleShot(1000, this, SLOT(routeAudio()));
-        return;
-    }
+        {
+            qDebug() << "PA callback not finished, retry";
+            QTimer::singleShot(1000, this, SLOT(routeAudio()));
+            return;
+        }
 
     qDebug() << QString("Route audio");
     source = paControl->findBluezSource();
@@ -609,11 +607,11 @@ void PAControl::routeAudio()
     speaker = paControl->findAlsaSink(alsaSinkName);
 
     if (mic != NULL and speaker != NULL)
-    {
-        paControl->routeSourceWithSink(source, speaker);
-        paControl->routeSourceWithSink(mic, sink);
-        qDebug() << QString("Create loopback modules successful");
-    }
+        {
+            paControl->routeSourceWithSink(source, speaker);
+            paControl->routeSourceWithSink(mic, sink);
+            qDebug() << QString("Create loopback modules successful");
+        }
     else {
         qDebug() << QString("Alsa source and speaker not found");
     }
@@ -630,15 +628,15 @@ void PAControl::unrouteAudio()
 
     QList<PAModule*> mlist = paControl->getAllModules();
     foreach(PAModule *module, mlist)
-    {
-        if (module->name.contains("module-loopback") &&
-            module->argument.contains("bluez") &&
-            module->argument.contains("alsa")) {
-            qDebug() << QString("Found loopback module, index: ") << module->index;
-            paControl->unloadModule(module);
-            qDebug() << QString("Remove loopback module successful");
+        {
+            if (module->name.contains("module-loopback") &&
+                module->argument.contains("bluez") &&
+                module->argument.contains("alsa")) {
+                qDebug() << QString("Found loopback module, index: ") << module->index;
+                paControl->unloadModule(module);
+                qDebug() << QString("Remove loopback module successful");
+            }
         }
-    }
 
     m_audioRouted = false;
     m_btSourceReady = false;
@@ -647,59 +645,65 @@ void PAControl::unrouteAudio()
 
 void PAControl::onCallsChanged()
 {
-    TRACE
+    TRACE;
 
     CallManager *cm = ManagerProxy::instance()->callManager();
     if (!cm || !cm->isValid())
-    {
-	    return;
-    }
-
-    if (cm->dialingCall() || cm->activeCall() || cm->callCount() > 1)
-    {
-        // new call is dialing or phone is picked up
-        qDebug() << "PAControl: new call in progress";
-
-        if(m_audioRouted)
         {
-            qDebug() << QString("Audio already routed");
             return;
         }
 
-        if(m_btSourceReady && m_btSinkReady)
+    if (cm->dialingCall() || cm->activeCall() || cm->callCount() > 1)
         {
-            qDebug() << QString("Route microphone and speakers");
-            routeAudio();
-        }
-        else
-        {
-            if(this->findBluezSource() != NULL && this->findBluezSink() != NULL)
-            {
-                // bt source and sink exists
-                m_btSourceReady = true;
-                m_btSinkReady = true;
-                qDebug() << QString("Route microphone and speakers");
-                routeAudio();
-            }
+            // new call is dialing or phone is picked up
+            qDebug() << "PAControl: new call in progress";
+
+            if(m_audioRouted)
+                {
+                    qDebug() << QString("Audio already routed");
+                    return;
+                }
+
+            if(m_btSourceReady && m_btSinkReady)
+                {
+                    qDebug() << QString("Route microphone and speakers");
+                    routeAudio();
+                }
             else
-            {
-                //no bt source or sink yet, let's wait until source and sink appears
-                m_btSourceReady = false;
-                m_btSinkReady = false;
-                connect(this, SIGNAL(sourceAppeared(PADevice*)), this, SLOT(onSourceAppeared(PADevice*)));
-                connect(this, SIGNAL(sinkAppeared(PADevice*)), this, SLOT(onSinkAppeared(PADevice*)));
-                qDebug() << QString("Audio not routed yet, wait for bt source and sinks");
-            }
+                {
+                    if(this->findBluezSource() != NULL && this->findBluezSink() != NULL)
+                        {
+                            // bt source and sink exists
+                            m_btSourceReady = true;
+                            m_btSinkReady = true;
+                            qDebug() << QString("Route microphone and speakers");
+                            routeAudio();
+                        }
+                    else
+                        {
+                            //no bt source or sink yet, let's wait until source and sink appears
+                            m_btSourceReady = false;
+                            m_btSinkReady = false;
+                            connect(this, SIGNAL(sourceAppeared(PADevice*)), this, SLOT(onSourceAppeared(PADevice*)));
+                            connect(this, SIGNAL(sinkAppeared(PADevice*)), this, SLOT(onSinkAppeared(PADevice*)));
+                            qDebug() << QString("Audio not routed yet, wait for bt source and sinks");
+                        }
+                }
         }
-    }
     else if (cm->callCount() <= 0)
-    {
-        qDebug() << QString("no more ofono calls");
-        if(m_audioRouted)
         {
-            qDebug() << QString("Unroute microphone and speakers");
-            unrouteAudio();
+            qDebug() << QString("no more ofono calls");
+            if(m_audioRouted)
+                {
+                    qDebug() << QString("Unroute microphone and speakers");
+                    unrouteAudio();
+                }
         }
-    }
 }
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */
 

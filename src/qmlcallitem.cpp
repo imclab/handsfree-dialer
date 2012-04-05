@@ -20,7 +20,7 @@ public:
 QMLCallItem::QMLCallItem(CallItem *proxy, QObject *parent)
     : QObject(parent), d(new QMLCallItemPrivate)
 {
-    TRACE
+    TRACE;
     d->proxy = proxy;
     
     QObject::connect(proxy->callProxy(), SIGNAL(stateChanged()), SLOT(onStateChanged()));
@@ -28,34 +28,34 @@ QMLCallItem::QMLCallItem(CallItem *proxy, QObject *parent)
 
 QMLCallItem::~QMLCallItem()
 {
-    TRACE
+    TRACE;
     delete this->d;
 }
 
 CallItem* QMLCallItem::proxy() const
 {
-    TRACE
+    TRACE;
     return d->proxy;
 }
 
 QString QMLCallItem::msisdn() const
 {
-    TRACE
+    TRACE;
     if (d->proxy->callProxy())
-       return d->proxy->callProxy()->lineID();
+        return d->proxy->callProxy()->lineID();
     return QString();
 }
 
 int QMLCallItem::numberLen() const
 {
-    TRACE
+    TRACE;
     QString number = msisdn();
     return number.size();
 }
 
 QString QMLCallItem::name() const
 {
-    TRACE
+    TRACE;
     if (d->proxy->callProxy())
         return d->proxy->callProxy()->name();
     return QString();
@@ -63,7 +63,7 @@ QString QMLCallItem::name() const
 
 QString QMLCallItem::state() const
 {
-    TRACE
+    TRACE;
     if (d->proxy->callProxy())
         return d->proxy->callProxy()->state();
     return QString();
@@ -71,7 +71,7 @@ QString QMLCallItem::state() const
 
 QString QMLCallItem::reason() const
 {
-    TRACE
+    TRACE;
     if (d->proxy->callProxy())
         return d->proxy->callProxy()->reason();
     return QString();
@@ -79,7 +79,7 @@ QString QMLCallItem::reason() const
 
 QDateTime QMLCallItem::startedAt() const
 {
-    TRACE
+    TRACE;
     if (d->proxy->callProxy())
         return d->proxy->callProxy()->startTime();
     return QDateTime();
@@ -87,8 +87,8 @@ QDateTime QMLCallItem::startedAt() const
 
 int QMLCallItem::duration() const
 {
-    TRACE
-   return 32;    
+    TRACE;
+    return 32;    
 
     if (d->proxy->callProxy())
         return d->proxy->callProxy()->duration();
@@ -97,7 +97,7 @@ int QMLCallItem::duration() const
 
 bool QMLCallItem::isMultiparty() const
 {
-    TRACE
+    TRACE;
     if (d->proxy->callProxy())
         return d->proxy->callProxy()->multiparty();
     return false;
@@ -105,27 +105,33 @@ bool QMLCallItem::isMultiparty() const
 
 void QMLCallItem::answer()
 {
-    TRACE
+    TRACE;
     if (d->proxy->callProxy())
         d->proxy->callProxy()->answer();
 }
 
 void QMLCallItem::deflect(const QString &msisdn)
 {
-    TRACE
+    TRACE;
     if (d->proxy->callProxy())
         d->proxy->callProxy()->deflect(msisdn);
 }
 
 void QMLCallItem::hangup()
 {
-    TRACE
+    TRACE;
     if (d->proxy->callProxy())
         d->proxy->callProxy()->hangup();
 }
 
 void QMLCallItem::onStateChanged()
 {
-    TRACE
+    TRACE;
     emit this->stateChanged(d->proxy->callProxy()->state());
 }
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

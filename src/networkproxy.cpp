@@ -14,29 +14,6 @@
 /* **************************************************************
  * Network Operator Class
  * **************************************************************/
-/* TODO: make property reference/storage more generic
-
-typedef struct {
-    unsigned int  id;
-    const char   *name;
-} OperatorProperty;
-
-enum OperatorPropertyID {
-        CountryCode = 0,
-        NetworkCode,
-        Name,
-        Status,
-        Technologies,
-};
-
-static OperatorProperty operatorProperty[] = {
-        { CountryCode,  "MobileCountryCode", },
-        { NetworkCode,  "MobileNetworkCode", },
-        { Name,         "Name",              },
-        { Status,       "Status",            },
-        { Technologies, "Technologies",      },
-};
-*/
 
 OperatorProxy::OperatorProxy(const QString &operatorPath)
     : org::ofono::NetworkOperator(OFONO_SERVICE,
@@ -47,7 +24,7 @@ OperatorProxy::OperatorProxy(const QString &operatorPath)
 {
     if (!isValid()) {
         qCritical() << org::ofono::NetworkOperator::staticInterfaceName() <<
-                       " connection failed: " << lastError().message();
+            " connection failed: " << lastError().message();
     } else {
         QDBusPendingReply<QVariantMap> reply;
         QDBusPendingCallWatcher * watcher;
@@ -78,7 +55,7 @@ void OperatorProxy::operatorDBusGetPropDone(QDBusPendingCallWatcher *call)
     if (reply.isError()) {
         // TODO: Handle this properly
         qCritical() << org::ofono::NetworkOperator::staticInterfaceName() <<
-                       ".GetProperties() failed: " << reply.error().message();
+            ".GetProperties() failed: " << reply.error().message();
     } else {
         QVariantMap properties = reply.value();
         m_countryCode  = qdbus_cast<QString>(properties["MobileCountryCode"]);
@@ -100,7 +77,7 @@ NetworkProxy::NetworkProxy(const QString &modemPath)
 {
     if (!isValid()) {
         qCritical() << org::ofono::NetworkRegistration::staticInterfaceName() <<
-                       " connection failed: " << lastError().message();
+            " connection failed: " << lastError().message();
     } else {
         QDBusPendingReply<QVariantMap> reply;
         QDBusPendingCallWatcher * watcher;
@@ -133,11 +110,11 @@ void NetworkProxy::networkDBusGetPropDone(QDBusPendingCallWatcher *call)
     if (reply.isError()) {
         // TODO: Handle this properly
         qCritical() << org::ofono::NetworkRegistration::staticInterfaceName() <<
-                       ".GetProperties() failed: " << reply.error().message();
+            ".GetProperties() failed: " << reply.error().message();
     } else {
         QVariantMap properties = reply.value();
         QList<QDBusObjectPath> paths =
-          qdbus_cast<QList<QDBusObjectPath> >(properties["AvailableOperators"]);
+            qdbus_cast<QList<QDBusObjectPath> >(properties["AvailableOperators"]);
 
         foreach (QDBusObjectPath p, paths) {
             QString path = QString(p.path());
@@ -146,17 +123,6 @@ void NetworkProxy::networkDBusGetPropDone(QDBusPendingCallWatcher *call)
             m_operatorPaths.append(path);
             m_operators.append(op);
 
-            // GetProperties() has probably not completed yet, so this
-            // test will be unlikely to work.
-            // TODO: connect to the propertyChanged() signal and do this there
-/*
-            if (op->status() == "current") {
-                m_currentOperator = op;
-                qDebug() << "Current network operator is " <<
-                            m_currentOperator->name() << " (" <<
-                            m_currentOperator->path() << ")";
-            }
-*/
         }
         m_mode   = qdbus_cast<QString>(properties["Mode"]);
         m_name   = qdbus_cast<QString>(properties["Operator"]);
@@ -170,3 +136,8 @@ void NetworkProxy::networkDBusGetPropDone(QDBusPendingCallWatcher *call)
     }
 }
 
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */

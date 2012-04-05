@@ -36,7 +36,7 @@ enum PAStatus {
 
 class PAControl : public QObject
 {
-    Q_OBJECT
+    Q_OBJECT;
 public:
     PAControl(QObject *parent = 0);
     ~PAControl();
@@ -105,3 +105,9 @@ private:
 };
 
 #endif // PACONTROL_H
+
+/* Local Variables:      */
+/* mode:c++              */
+/* c-basic-offset:4      */
+/* indent-tabs-mode: nil */
+/* End:                  */
