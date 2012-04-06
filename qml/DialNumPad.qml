@@ -254,7 +254,7 @@ Item
                 Image
                 {
                     id: closeButton
-                    source: "/usr/share/hfdialer/images/ivi_btn-close2.png"
+                    source: "/usr/share/hfdialer/images/ivi_btn-close.png"
                     //anchors { left: parent.left; top: parent.top;}
                     height: parent.height   
                     width: (parent.width / 7) - 5
