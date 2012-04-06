@@ -219,7 +219,7 @@ Item
                     id: bCall;
 
                     height: parent.height
-                    width: parent.width - bDelete.width - 5
+                    width: parent.width - bDelete.width - closeButton.width - 5
                     source: "/usr/share/hfdialer/images/ivi_btn-call.png"
 
                     Image {
@@ -247,6 +247,25 @@ Item
                                     entry.clear();
                                 }
                             }
+                        }
+                    }
+                }
+
+                Image
+                {
+                    id: closeButton
+                    source: "/usr/share/hfdialer/images/ivi_btn-close2.png"
+                    //anchors { left: parent.left; top: parent.top;}
+                    height: parent.height   
+                    width: (parent.width / 7) - 5
+
+                    MouseArea {
+                        id: closeArea
+                          anchors.fill: parent
+
+                    onClicked: {
+                        console.log("CLOSE BUTTON CLICKED")
+                        Qt.quit()
                         }
                     }
                 }
