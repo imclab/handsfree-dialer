@@ -21,7 +21,7 @@ class QMLDialer : public QObject
 
     Q_PROPERTY(QString mailbox READ mailbox WRITE setMailbox);
     Q_PROPERTY(QMLCallItem* currentCall READ currentCall);
-    Q_PROPERTY(bool modemOnline READ modemOnline WRITE setModemOnline);
+    Q_PROPERTY(bool modemOnline READ modemOnline WRITE setModemOnline NOTIFY modemOnlineChanged);
     Q_PROPERTY(int callCount READ callCount NOTIFY callCountChanged);
 
 public:
@@ -37,6 +37,7 @@ Q_SIGNALS:
     void incomingCall();
     void outgoingCall();
     void callCountChanged(int callCount); 
+    void modemOnlineChanged(bool powered);
 
 public Q_SLOTS:
     void setMailbox(const QString &number);

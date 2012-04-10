@@ -30,6 +30,18 @@ Item
             dialPage.state = 'noCall'
     }
 
+    Connections {
+        target: adapter
+        onModemOnlineChanged: {
+            console.log("BJONES POWERED HAS CHANGED!")
+            if (!adapter.modemOnline)
+            {
+                console.log("BJONES MODEM NOW POWERED DOWN TRYING TO RECONNECT")
+                adapter.modemOnline = true
+            }
+         }
+    }
+
     Image
     {
         id: dialPage
@@ -198,6 +210,15 @@ Item
                     spacing: 2
                     Repeater {
                         model: btDevicesModel
+
+                        Component.onCompleted: {
+                            if (!adapter.modemOnline)
+                            {
+                                console.log("BJONES previously created modem is not powered! Try and re-connect")
+                                adapter.modemOnline = true
+                            }
+                        }
+
                         delegate: DeviceDelegateActive {
 
                             deviceName: model.name

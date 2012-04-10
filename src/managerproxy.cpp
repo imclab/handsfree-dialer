@@ -53,6 +53,9 @@ ManagerProxy::ManagerProxy(const QString &service,
     }
 
     gManager = this;
+
+    if (m_modem && m_modem->isValid() && !m_modem->powered())
+	m_modem->setPowered(true);
 }
 
 ManagerProxy::~ManagerProxy()
@@ -185,7 +188,14 @@ void ManagerProxy::setModem(QString modemPath)
     if (m_modem &&
         m_modem->isValid() &&
         m_modem->path() == modemPath)
+    {
+	if (!m_modem->powered())
+		m_modem->setPowered(true);
+
+	qDebug()<<"BJONES setting modem, but we already have it! If not powered, power that thing!";
+
         return;
+    }
 
     if (m_modem)
         {
