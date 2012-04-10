@@ -248,17 +248,17 @@ void QMLDialer::connectAll()
     TRACE;
     CallManager *cm = ManagerProxy::instance()->callManager();
 
+     if (ManagerProxy::instance()->modem() && ManagerProxy::instance()->modem()->isValid())
+     {
+        connect(ManagerProxy::instance()->modem(), SIGNAL(poweredChanged(bool)), this, SIGNAL(modemOnlineChanged(bool)));
+     }
+
     if (cm && cm->isValid())
         {
             disconnect(cm, SIGNAL(callsChanged()));
             disconnect(cm, SIGNAL(incomingCall(CallItem*)));
             connect(cm, SIGNAL(callsChanged()), this, SLOT(onCallsChanged()));
             connect(cm, SIGNAL(incomingCall(CallItem*)), SLOT(onIncomingCall(CallItem*)));
- 	    
-	    if (ManagerProxy::instance()->modem() && ManagerProxy::instance()->modem()->isValid())
-	    {	
-	    	connect(ManagerProxy::instance()->modem(), SIGNAL(poweredChanged(bool)), this, SIGNAL(modemOnlineChanged(bool)));
-	    }
             qDebug() << QString("CallMgr is connected");
         }
     else if (cm)

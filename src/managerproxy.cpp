@@ -50,6 +50,7 @@ ManagerProxy::ManagerProxy(const QString &service,
         connect(this,
                 SIGNAL(ModemRemoved(const QDBusObjectPath&)),
                 SLOT(modemRemoved(const QDBusObjectPath&)));
+
     }
 
     gManager = this;
@@ -131,6 +132,7 @@ void ManagerProxy::modemAdded(const QDBusObjectPath &in0,const QVariantMap &in1)
     m_modemList.removeDuplicates();
 
     setModem(in0.path());
+    setCallManager(m_modemPath);
 }
 
 void ManagerProxy::modemRemoved(const QDBusObjectPath &in0)
@@ -189,10 +191,9 @@ void ManagerProxy::setModem(QString modemPath)
         m_modem->isValid() &&
         m_modem->path() == modemPath)
     {
+	//If we have a modem, it's valid, but not powered, power it up.
 	if (!m_modem->powered())
 		m_modem->setPowered(true);
-
-	qDebug()<<"BJONES setting modem, but we already have it! If not powered, power that thing!";
 
         return;
     }
@@ -239,6 +240,7 @@ void ManagerProxy::setNetwork(QString modempath)
 
 void ManagerProxy::setCallManager(QString modempath)
 {
+    TRACE
     if (!m_modem || !m_modem->isValid())
         return;
 
@@ -253,11 +255,13 @@ void ManagerProxy::setCallManager(QString modempath)
         }
     }
     else {
-        if(m_callManager || !m_callManager->isValid()) {
-            delete m_callManager;
-            m_callManager = new CallManager(modempath);
-            emit callManagerChanged();
-        }
+        
+	 if(m_callManager)
+            delete m_callManager;        
+	 
+	 m_callManager = new CallManager(modempath);
+	 connect(m_callManager, SIGNAL(connected()), this, SIGNAL(callManagerChanged()));
+         emit callManagerChanged();
     }
 }
 

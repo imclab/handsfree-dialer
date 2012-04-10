@@ -85,6 +85,7 @@ private Q_SLOTS:
     void sendTonesFinished(const bool status);
     void callStateChanged();
     void callMultipartyChanged();
+    void modemValidityChanged(bool valid);
 
     // Handlers for Resource Policy Manager states and conditions
     void proceedCallDial(const QString number);

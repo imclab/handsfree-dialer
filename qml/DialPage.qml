@@ -33,10 +33,10 @@ Item
     Connections {
         target: adapter
         onModemOnlineChanged: {
-            console.log("BJONES POWERED HAS CHANGED!")
+
+	    //If the modem gets powered down for any reason, attempt to power it again to maintain connection
             if (!adapter.modemOnline)
             {
-                console.log("BJONES MODEM NOW POWERED DOWN TRYING TO RECONNECT")
                 adapter.modemOnline = true
             }
          }
@@ -212,9 +212,10 @@ Item
                         model: btDevicesModel
 
                         Component.onCompleted: {
-                            if (!adapter.modemOnline)
+                            
+			    //Once model is completed, check if the modem is powered. If not, power it
+			    if (!adapter.modemOnline)
                             {
-                                console.log("BJONES previously created modem is not powered! Try and re-connect")
                                 adapter.modemOnline = true
                             }
                         }
@@ -237,10 +238,6 @@ Item
                                 }
 
                                 onConnectedChanged: {
-                                    console.log("device CONNECTED, attempting to hook up audio")
-                                    // device.connectAudio()
-                                    // device.connectAudioSrc()
-                                    // device.connectInput()
                                 }
                             }
 

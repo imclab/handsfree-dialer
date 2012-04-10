@@ -57,6 +57,8 @@ CallManager::CallManager(const QString &modemPath, QObject *parent)
 
     connect(this,SIGNAL(callsChanged()),this,SLOT(callChangedSlot()));
 
+    connect(this, SIGNAL(validityChanged(bool)), this, SLOT(modemValidityChanged(bool)) );
+
     if (isValid())
         emit connected();
 }
@@ -75,6 +77,13 @@ CallManager::~CallManager()
     if (d->callItems.size() > 0)
         emit callsChanged();
     d->callItems.clear();
+}
+
+void CallManager::modemValidityChanged(bool valid)
+{
+    TRACE;
+    if (valid)
+	emit connected();
 }
 
 QList<CallItem *> CallManager::getCallItems() const
