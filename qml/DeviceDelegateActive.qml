@@ -50,7 +50,6 @@ Item {
           id: clickArea
           anchors.fill: parent
 
-
            onPressed: {
         	 availableBluetoothItem.source = "/usr/share/hfdialer/images/ivi_btn-list.png"            
             }
