@@ -22,16 +22,34 @@ Item {
     signal clicked()
     signal close()
 
+    Connections {
+        target: adapter
+        onModemOnlineChanged: {
+
+            //If the modem gets powered down for any reason, attempt to power it again to maintain connection
+            if (!adapter.modemOnline)
+            {
+                mainText.color = "grey"
+                availableBluetoothItem.source = "/usr/share/hfdialer/images/ivi_btn-list-inactive.png"
+            }
+            else
+            {
+                mainText.color = "white"
+                availableBluetoothItem.source = "/usr/share/hfdialer/images/ivi_btn-list.png"
+            }
+         }
+    }
+
     Image {
         id: availableBluetoothItem
 
-        source: "/usr/share/hfdialer/images/ivi_btn-list-inactive.png"
-        
+        source: !adapter.modemOnline? "/usr/share/hfdialer/images/ivi_btn-list-inactive.png" : availableBluetoothItem.source = "/usr/share/hfdialer/images/ivi_btn-list.png"
         anchors {fill: parent; leftMargin: 8; rightMargin: 8; topMargin: 8}
 
 	MouseArea {
           id: clickArea
           anchors.fill: parent
+
 
            onPressed: {
         	 availableBluetoothItem.source = "/usr/share/hfdialer/images/ivi_btn-list.png"            
@@ -57,7 +75,7 @@ Item {
             font.pixelSize: parent.height / 2
             style: Text.Outline
             styleColor: "#3B3A39"
-            color: "white"            
+            color: !adapter.modemOnline? "grey" : "white"
             text: root.deviceName
             elide: Text.ElideRight
         }
