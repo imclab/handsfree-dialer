@@ -88,11 +88,13 @@ QDateTime QMLCallItem::startedAt() const
 int QMLCallItem::duration() const
 {
     TRACE;
-    return 32;    
 
-    if (d->proxy->callProxy())
-        return d->proxy->callProxy()->duration();
-    return 66;
+    if (d->proxy)
+    {
+   	 if (d->proxy->callProxy())
+        	return d->proxy->callProxy()->duration();
+    }
+    return 0;
 }
 
 bool QMLCallItem::isMultiparty() const
