@@ -61,7 +61,7 @@ Item
     states {
         State {
             name: 'active'           
-	    PropertyChanges {target: callDurationInd; text: "00:00:00"}
+	    PropertyChanges {target: root; callDuration: "00:00:00"}
             PropertyChanges {target: answerButton; visible: false}
             PropertyChanges {target: hangupButton; visible: true; width: parent.width}
             PropertyChanges {target: stateInd; text: qsTr("Active")}
@@ -91,7 +91,7 @@ Item
 
         State {
             name: 'incoming'            
-	    PropertyChanges {target: callDurationInd; text: "00:00:00"}
+	    PropertyChanges {target: root; callDuration: "00:00:00"}
             PropertyChanges {target: answerButton; visible: true}
             PropertyChanges {target: hangupButton; visible: true; width: parent.width * 0.45}
             PropertyChanges {target: stateInd; text: qsTr("Incoming...")}
