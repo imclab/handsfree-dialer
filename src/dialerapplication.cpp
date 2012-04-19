@@ -83,7 +83,7 @@ void DialerApplication::connectAll()
             connect(m_manager->voicemail(), SIGNAL(messagesWaitingChanged()), this,
                     SLOT(messagesWaitingChanged()));
             PAControl* paControl = PAControl::instance();
-        qDebug()<<"UBER DEBUG!!!  I can has connect with paControl onCallsChanged";
+            qDebug()<<"UBER DEBUG!!!  I can has connect with paControl onCallsChanged";
             connect(m_manager->callManager(), SIGNAL(callsChanged()), paControl,
                     SLOT(onCallsChanged()));
         }
@@ -138,14 +138,20 @@ void DialerApplication::init()
 
     DBusDialerAdapter *adapter = new DBusDialerAdapter(this);
     if(!adapter)
-        {
-            qWarning() << "DBus adapter instantiation failed.";
-        }
+    {
+        qWarning() << "DBus adapter instantiation failed.";
+    }
 
-    if(!QDBusConnection::sessionBus().registerObject(DBUS_SERVICE_PATH, this))
+    if(!QDBusConnection::systemBus().registerService("com.hfdialer"))
+    {
+        qCritical() << "Error registering on zee bus: " <<
+                       QDBusConnection::systemBus().lastError().message();
+    }
+
+    if(!QDBusConnection::systemBus().registerObject(DBUS_SERVICE_PATH, this))
         {
             qCritical() << "Error registering dbus object:" <<
-                QDBusConnection::sessionBus().lastError().message();
+                QDBusConnection::systemBus().lastError().message();
         }
     connect(m_manager, SIGNAL(modemChanged()),
             SLOT(modemChanged()));
@@ -167,7 +173,7 @@ void DialerApplication::modemChanged()
     else
     {
         qDebug()<<"modem is null";
-        }
+    }
 }
 
 void DialerApplication::modemConnected()
