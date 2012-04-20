@@ -30,25 +30,6 @@ Item
         }
     }
 
-    function show()
-    {
-        height = 72 * 5 + 4;
-        numPadShown = true;
-    }
-
-    function hide()
-    {
-        height = 72;
-        numPadShown = false;
-    }
-
-    function toggle()
-    {
-        if(numPadShown == true) {hide()} else {show()}
-    }
-
-    Behavior on height {PropertyAnimation {duration: 500; easing.type: Easing.OutBounce}}
-
     Image
     {
         id: numpad
@@ -255,7 +236,6 @@ Item
                 {
                     id: closeButton
                     source: "/usr/share/hfdialer/images/ivi_btn-close.png"
-                    //anchors { left: parent.left; top: parent.top;}
                     height: parent.height   
                     width: (parent.width / 7) - 5
 
@@ -265,6 +245,7 @@ Item
 
                     onClicked: {
                         console.log("CLOSE BUTTON CLICKED")
+
                         Qt.quit()
                         }
                     }

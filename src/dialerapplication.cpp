@@ -13,6 +13,7 @@
 #include "dialerapplication.h"
 #include "dialercontext.h"
 #include "dbusdialeradapter.h"
+#include "hfdialer_adaptor.h"
 #include "pacontrol.h"
 #include "qmlmainwindow.h"
 #include <QtGui>
@@ -136,7 +137,7 @@ void DialerApplication::init()
     else
         m_connected = true;
 
-    DBusDialerAdapter *adapter = new DBusDialerAdapter(this);
+    HfdialerAdaptor *adapter = new HfdialerAdaptor(this);
     if(!adapter)
     {
         qWarning() << "DBus adapter instantiation failed.";
@@ -158,6 +159,8 @@ void DialerApplication::init()
 
    this->connectAll();
 
+   m_mainWindow = QMLMainWindow::instance();
+   connect(m_mainWindow, SIGNAL(closeWindow()),this, SLOT(closeWindow()));
 }
 
 void DialerApplication::modemChanged()
@@ -275,6 +278,18 @@ void DialerApplication::onCallsChanged()
 {
     TRACE;
     QMLMainWindow::instance()->tryToShow();
+}
+
+void DialerApplication::raise()
+{
+    TRACE;
+    QMLMainWindow::instance()->tryToShow();
+}
+
+void DialerApplication::closeWindow()
+{
+    TRACE;
+    m_mainWindow->hide();
 }
 
 /* Local Variables:      */

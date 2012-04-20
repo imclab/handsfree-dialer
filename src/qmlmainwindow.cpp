@@ -43,9 +43,9 @@ public:
 static void registerDataTypes()
 {
     TRACE;
-    qmlRegisterType<QMLDialer>("com.tizen.hfdialer", 1, 0, "Dialer");
+    qmlRegisterType<QMLDialer>("com.hfdialer", 1, 0, "Dialer");
 
-    qmlRegisterUncreatableType<QMLCallItem>("com.tizen.hfdialer", 1, 0, "CallItem", "");
+    qmlRegisterUncreatableType<QMLCallItem>("com.hfdialer", 1, 0, "CallItem", "");
 }
 
 QMLMainWindow::QMLMainWindow(QWidget *parent)
@@ -62,9 +62,7 @@ QMLMainWindow::QMLMainWindow(QWidget *parent)
 
     this->setupUi();
 
-    da->setActiveWindow(this);
-
-    connect(this->engine(), SIGNAL(quit()), this, SLOT(close()));
+    connect(this->engine(), SIGNAL(quit()), this, SLOT(closeEvent()));
 }
 
 QMLMainWindow::~QMLMainWindow()
@@ -109,8 +107,6 @@ void QMLMainWindow::setupUi()
 
     d->engine = new QDeclarativeEngine(this);
 
-    d->engine->addImportPath("/usr/share/hfdialer/qml/base");
-
     d->engine->rootContext()->setContextProperty("controller", this); //TODO: Remove
     this->setSource(QUrl::fromLocalFile("/usr/share/hfdialer/qml/main.qml"));
     d->component = new QDeclarativeComponent(d->engine, this);
@@ -137,25 +133,17 @@ void QMLMainWindow::tryToShow()
     if (d->component->isReady())
         {
             DialerApplication *da = DialerApplication::instance();
-            da->setActiveWindow(this);
+	    da->setActiveWindow(this);
             da->activeWindow()->show();
             da->activeWindow()->activateWindow();
-            da->activeWindow()->raise();
             this->show();
         }
  
 }
-void QMLMainWindow::hide()
+void QMLMainWindow::closeEvent() 
 {
     TRACE;
-    QGraphicsView::hide();
-}
-
-void QMLMainWindow::closeEvent(QCloseEvent *event)
-{
-    TRACE;
-    event->accept();
-
+    emit closeWindow();
 }
 
 void QMLMainWindow::onGeometryChanged()

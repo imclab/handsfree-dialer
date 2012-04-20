@@ -7,7 +7,7 @@
  */
 
 import Qt 4.7
-import com.tizen.hfdialer 1.0
+import com.hfdialer 1.0
 
 import 'javascripts/framework.js' as Support
 

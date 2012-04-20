@@ -21,10 +21,25 @@
 int main(int argc, char *argv[])
 {
     TRACE;
+    QDBusConnection bus = QDBusConnection::systemBus();
+    QStringList serviceNames = bus.interface()->registeredServiceNames();
+ 	
+    if (serviceNames.contains("com.hfdialer"))
+    {
+        QDBusMessage message = QDBusMessage::createMethodCall("com.hfdialer","/com/dialer","com.hfdialer", "raise");
+	bus.call(message,QDBus::NoBlock);
+	
+	return 0;
+    }
+
     DialerApplication app(argc, argv);  
 
     QMLMainWindow *qmw = QMLMainWindow::instance();
-    qmw->tryToShow();
+    
+    QString argString(argv[1]); 
+
+    if (argString != "noshow")
+       qmw->tryToShow();
 
     return app.exec();
 }

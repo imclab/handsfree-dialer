@@ -27,19 +27,18 @@ public:
     static   QMLMainWindow* instanceP(QWidget* parent);
     ~QMLMainWindow();
 
+Q_SIGNALS:
+    void closeWindow();
+
 public Q_SLOTS:
-    void hide();
     void tryToShow();
-    
+    void closeEvent(); 
     void setAdapter(QMLDialer *adapter); //TODO: Refactor out
 
 protected Q_SLOTS:
     void setupUi();
 
     void onGeometryChanged();
-
-protected:
-    virtual void closeEvent(QCloseEvent *event);
 
 private:
     explicit QMLMainWindow(QWidget *parent = 0);

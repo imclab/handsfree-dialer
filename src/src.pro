@@ -8,8 +8,8 @@ MOC_DIR = .moc
 OBJECTS_DIR = .obj
 MGEN_OUTDIR = .gen
 
-DEFINES += DBUS_SERVICE_PATH=\\\"/com/tizen/${QMAKE_TARGET}\\\"
-DEFINES += DBUS_SERVICE=\\\"com.tizen.${QMAKE_TARGET}\\\"
+DEFINES += DBUS_SERVICE_PATH=\\\"/com/${QMAKE_TARGET}\\\"
+DEFINES += DBUS_SERVICE=\\\"com.${QMAKE_TARGET}\\\"
 
 verbose {
     DEFINES += VERBOSE 
@@ -76,7 +76,7 @@ HEADERS += \
 
 system(qdbusxml2cpp -p voicecall_interface dbus/org.ofono.voicecall.xml)
 system(qdbusxml2cpp -p operator_interface dbus/org.ofono.operator.xml)
-system(qdbusxml2cpp -a hfdialer_adaptor dbus/com.tizen.hfdialer.xml)
+system(qdbusxml2cpp -a hfdialer_adaptor dbus/com.hfdialer.xml)
 system(qdbusxml2cpp -i dbustypes.h -p manager_interface dbus/org.ofono.manager.xml)
 system(qdbusxml2cpp -i dbustypes.h -p modem_interface dbus/org.ofono.modem.xml)
 

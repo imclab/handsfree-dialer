@@ -12,6 +12,7 @@
 #define DIALERAPPLICATION_h
 
 #include "managerproxy.h"
+#include "qmlmainwindow.h"
 #include <QSortFilterProxyModel>
 #include <QApplication>
 
@@ -40,7 +41,9 @@ public:
 Q_SIGNALS:
     void showUi();
     void hideUi();
-
+public Q_SLOTS:
+    void closeWindow();
+    void raise();
 private Q_SLOTS:
     void connectAll();
     void messagesWaitingChanged();
@@ -67,7 +70,8 @@ private:
 
     bool          m_connected;
     QString       m_lastError;
-
+    QMLMainWindow *m_mainWindow;
+    QDBusConnection *m_bus;
     Q_DISABLE_COPY(DialerApplication);
 };
 

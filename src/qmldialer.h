@@ -42,32 +42,24 @@ Q_SIGNALS:
 public Q_SLOTS:
     void setMailbox(const QString &number);
     void setModemOnline(bool online);
-
     QString speedDial(int index) const;
     void setSpeedDial(int index, const QString &number);
-
     void dial(const QString &msisdn);
     void hangupAll();
-
     void silenceRingtone();
-
     void sendTones(const QString &tones);
-
     void transfer();
     void swapCalls();
     void releaseAndAnswer();
     void holdAndAnswer();
-
     void createMultiparty();
     void hangupMultiparty();
     void privateChat(const QMLCallItem &callitem);
 
 protected Q_SLOTS:
     void connectAll();
-
     void onCallsChanged();
     void onIncomingCall(CallItem *callitem);
-
     void onCallManagerChanged();
 
 private:
