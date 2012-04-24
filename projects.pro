@@ -16,6 +16,9 @@ desktop_entry.CONFIG += no_check_exist
 dbus_service.files = dialer.service
 dbus_service.path += $$INSTALL_ROOT/usr/share/dbus-1/services
 
+dbus_conf.files = hfdialer.conf
+dbus_conf.path += $$INSTALL_ROOT/etc/dbus-1/system.d
+
 # Documentation
 documentation.files = AUTHORS ChangeLog LICENSE README TODO
 documentation.path  = $$INSTALL_ROOT/usr/share/hfdialer/
@@ -23,6 +26,7 @@ documentation.path  = $$INSTALL_ROOT/usr/share/hfdialer/
 INSTALLS += \
     desktop_entry \
     dbus_service \
+    dbus_conf \
     documentation \
 
 PROJECT_NAME = hfdialer

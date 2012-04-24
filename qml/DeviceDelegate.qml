@@ -26,10 +26,19 @@ Item {
         source: "/usr/share/hfdialer/images/ivi_btn-list-inactive.png"   
         anchors {fill: parent; leftMargin: 8; rightMargin: 8; topMargin: 8}
 
+	Image {
+	    id: iconImg
+	    source: icon == "phone" ? "/usr/share/hfdialer/images/bluetooth-smartphone.png" : 
+				      "/usr/share/hfdialer/images/computer.png"
+            height: availableBluetoothItem.containerHeight * 0.75
+	    width: height
+            anchors {left: parent.left; verticalCenter: parent.verticalCenter; leftMargin: icon == "phone"? 10 : 10;}
+	}
+	
         Text {
             id: mainText
 
-            anchors {fill: parent; leftMargin: 15}
+            anchors {left: iconImg.right; right: parent.right; top: parent.top; bottom: parent.bottom; rightMargin: 10; leftMargin: icon == "phone"? 18 : 18;}
             verticalAlignment: Text.AlignVCenter
             height:  availableBluetoothItem.containerHeight
             font.pixelSize: parent.height / 2

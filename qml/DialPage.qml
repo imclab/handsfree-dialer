@@ -30,16 +30,28 @@ Item
             dialPage.state = 'noCall'
     }
 
+    Timer {
+        id: reconnectTimer
+        interval: 3000
+        repeat: false
+        running: false
+
+        onTriggered:
+        {
+            adapter.modemOnline = true
+        }
+    }
+
     Connections {
         target: adapter
         onModemOnlineChanged: {
 
-	    //If the modem gets powered down for any reason, attempt to power it again to maintain connection
+            //If the modem gets powered down for any reason, attempt to power it again to maintain connection
             if (!adapter.modemOnline)
             {
-                adapter.modemOnline = true
+                reconnectTimer.running = true;
             }
-         }
+        }
     }
 
     Image
@@ -213,15 +225,15 @@ Item
 
                         Component.onCompleted: {
                             
-			    //Once model is completed, check if the modem is powered. If not, power it
-			    if (!adapter.modemOnline)
+                            //Once model is completed, check if the modem is powered. If not, power it
+                            if (!adapter.modemOnline)
                             {
                                 adapter.modemOnline = true
                             }
                         }
 
                         delegate: DeviceDelegateActive {
-
+                            id: deligateItem
                             deviceName: model.name
                             address: model.address
                             dbuspath: model.path
@@ -244,6 +256,7 @@ Item
                             onClose: {
                                 console.log("unparing ...");
                                 device.unpair();
+                                btDevicesModel.deviceRemoved(device.path);
                             }
                         }
                     }
