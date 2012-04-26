@@ -17,6 +17,8 @@ Item
 
     property alias activeCall: activeCallView.call
     property alias callState: activeCallView.state
+    property bool unpairing: FALSE;
+    property bool pairing: FALSE;
 
     Keys.onEscapePressed: {
         console.log("Escape Pressed");
@@ -47,7 +49,7 @@ Item
         onModemOnlineChanged: {
 
             //If the modem gets powered down for any reason, attempt to power it again to maintain connection
-            if (!adapter.modemOnline)
+            if (!adapter.modemOnline && !unpairing)
             {
                 reconnectTimer.running = true;
             }
@@ -244,6 +246,9 @@ Item
                                 target: btDevicesModel
                                 onDevicePaired: {
                                     console.log("new paired device address:" + device.address + "==" + model.address)
+                                    root.unpairing = false;
+                                    root.pairing = false;
+
                                     if(device.address === model.address){
                                         device.trusted = true
                                     }
@@ -254,7 +259,11 @@ Item
                             }
 
                             onClose: {
-                                console.log("unparing ...");
+                                console.log("unpairing ...");
+                                root.unpairing = true;
+				if (pairing)
+				    device.cancelPairing();
+
                                 device.unpair();
                                 btDevicesModel.deviceRemoved(device.path);
                             }
@@ -294,6 +303,7 @@ Item
 
                             onClicked: {
                                 console.log("BUTTON CLICKED bubbled up")
+                                root.pairing = true;
                                 nearbyDevicesModel.discover(false)
                                 nearbyDevicesModel.pair(model.address)
                             }

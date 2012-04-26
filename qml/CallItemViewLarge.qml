@@ -28,20 +28,21 @@ Item
 	    
  	    root.state = call.state
 
-            if (call.name) {
+          /*  if (call.name) {
                 root.callerLabelText = call.name;
 
-            } else {
 
+            } else {
+            */
 		if (call.numberLen <= 10)
 		{
                   root.callerLabelText = call.msisdn[0] + call.msisdn[1] + call.msisdn[2] + '-' +
 		  		         call.msisdn[3] + call.msisdn[4] + call.msisdn[5] + '-' +
-				         call.msisdn[6] + call.msisdn[7] + call.msisdn[8] + call.msisdn[9];
+                                         call.msisdn[6] + call.msisdn[7] + call.msisdn[8] + call.msisdn[9];
 		}
 		else
 		  root.callerLabelText = call.msisdn;
-            }
+           //}
         }
     }
 
