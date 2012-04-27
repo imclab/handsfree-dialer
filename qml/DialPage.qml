@@ -17,8 +17,8 @@ Item
 
     property alias activeCall: activeCallView.call
     property alias callState: activeCallView.state
-    property bool unpairing: FALSE;
-    property bool pairing: FALSE;
+    property bool unpairing: false;
+    property bool pairing: false;
 
     Keys.onEscapePressed: {
         console.log("Escape Pressed");
@@ -261,11 +261,12 @@ Item
                             onClose: {
                                 console.log("unpairing ...");
                                 root.unpairing = true;
-				if (pairing)
-				    device.cancelPairing();
+                                if (pairing)
+                                    device.cancelPairing();
 
                                 device.unpair();
                                 btDevicesModel.deviceRemoved(device.path);
+                                nearbyDevicesModel.discover(true);
                             }
                         }
                     }
@@ -277,7 +278,7 @@ Item
                 anchors {top: horizDivider2.bottom; bottom: parent.bottom; left: parent.left; right: parent.right}
                 clip: true
                 contentWidth: parent.width
-                contentHeight: parent.height
+                contentHeight: 0
                 flickableDirection: Flickable.VerticalFlick
 
                 Column {
@@ -290,22 +291,29 @@ Item
                         model: nearbyDevicesModel
 
                         onCountChanged: {
-                            modelFlickable.contentHeight = (count * 80)
+                            //modelFlickable.contentHeight = (count * 80)
                         }
 
                         delegate: DeviceDelegate {
                             id: availableBluetoothItem
+                            visible: model.icon == "phone" ? true : false
                             width: nearbyDevicesList.width
                             deviceName: name
                             icon: model.icon
                             alias: model.alias
                             anchors {margins: 8}
 
+                            Component.onCompleted: {
+                                modelFlickable.contentHeight = visible ? modelFlickable.contentHeight + 80 : modelFlickable.contentHeight
+                            }
+                            
                             onClicked: {
-                                console.log("BUTTON CLICKED bubbled up")
-                                root.pairing = true;
-                                nearbyDevicesModel.discover(false)
-                                nearbyDevicesModel.pair(model.address)
+                                if (visible){
+                                    console.log("BUTTON CLICKED bubbled up")
+                                    root.pairing = true;
+                                    nearbyDevicesModel.discover(false)
+                                    nearbyDevicesModel.pair(model.address)
+                                }
                             }
 
 
