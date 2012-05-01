@@ -16,7 +16,7 @@ ModemProxy::ModemProxy(const QString &objectPath)
     : org::ofono::Modem(OFONO_SERVICE,
                         objectPath,
                         QDBusConnection::systemBus()),
-      m_interfaces(0)
+      m_interfaces(0), m_connected(false)
 {
     TRACE;
     if (!isValid()) {
