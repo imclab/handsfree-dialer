@@ -15,7 +15,7 @@ Item
 {
     id: main
 
-    width: 1024; height: 600
+    width: 800; height: 480
 
     Dialer { id: adapter }
 
